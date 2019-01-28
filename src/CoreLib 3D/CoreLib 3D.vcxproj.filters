@@ -1,0 +1,371 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="CoreDX.cpp">
+      <Filter>MainCore</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>MainCore</Filter>
+    </ClCompile>
+    <ClCompile Include="RasterizerState.cpp">
+      <Filter>DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>MainCore</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>MainCore</Filter>
+    </ClCompile>
+    <ClCompile Include="SamplerState.cpp">
+      <Filter>DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="MySound.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="DxManager.cpp">
+      <Filter>DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderDepthView.cpp">
+      <Filter>DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="header.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Object\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Raycast.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Component\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Component\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Object\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
+      <Filter>Component\Renderer\Child</Filter>
+    </ClCompile>
+    <ClCompile Include="SkySphere.cpp">
+      <Filter>Component\Renderer\Child</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Object\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="RCube.cpp">
+      <Filter>Component\Renderer\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Component\Renderer\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="RLine.cpp">
+      <Filter>Component\Renderer\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="RPlane.cpp">
+      <Filter>Component\Renderer\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="RSphere.cpp">
+      <Filter>Component\Renderer\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="InstanceRenderer.cpp">
+      <Filter>Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Object\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Instancer.cpp">
+      <Filter>Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="WriteManager.cpp">
+      <Filter>DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="CTransformer.cpp">
+      <Filter>Component\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>Component\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderAABB.cpp">
+      <Filter>Component\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderOBB.cpp">
+      <Filter>Component\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaneUI.cpp">
+      <Filter>Component\Renderer\Child</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics.cpp">
+      <Filter>Component\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="MaxImporter.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="DxClient.cpp">
+      <Filter>Server</Filter>
+    </ClCompile>
+    <ClCompile Include="Worker.cpp">
+      <Filter>Server</Filter>
+    </ClCompile>
+    <ClCompile Include="CEventTimer.cpp">
+      <Filter>Component\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="CAnimation.cpp">
+      <Filter>Component\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightMap.cpp">
+      <Filter>Component\Renderer\Child</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlaneShadow.cpp">
+      <Filter>Component\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="AseParser.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="FrustumBox.cpp">
+      <Filter>Component\Renderer\Child</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CoreDX.h">
+      <Filter>MainCore</Filter>
+    </ClInclude>
+    <ClInclude Include="header.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>MainCore</Filter>
+    </ClInclude>
+    <ClInclude Include="RasterizerState.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>MainCore</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>MainCore</Filter>
+    </ClInclude>
+    <ClInclude Include="SamplerState.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="MySound.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="DxManager.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="IBasis.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="IDxBasis.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="ISingleton.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderDepthView.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Object\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Raycast.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Component\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Component\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Object\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="SkySphere.h">
+      <Filter>Component\Renderer\Child</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBox.h">
+      <Filter>Component\Renderer\Child</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Object\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="RCube.h">
+      <Filter>Component\Renderer\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Component\Renderer\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="RLine.h">
+      <Filter>Component\Renderer\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="RPlane.h">
+      <Filter>Component\Renderer\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="RSphere.h">
+      <Filter>Component\Renderer\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="InstanceRenderer.h">
+      <Filter>Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Object\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Instancer.h">
+      <Filter>Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="WriteManager.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Component\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="CTransformer.h">
+      <Filter>Component\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>Component\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderAABB.h">
+      <Filter>Component\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderOBB.h">
+      <Filter>Component\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaneUI.h">
+      <Filter>Component\Renderer\Child</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics.h">
+      <Filter>Component\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="MaxImporter.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="DxClient.h">
+      <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Worker.h">
+      <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="CEventTimer.h">
+      <Filter>Component\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="CAnimation.h">
+      <Filter>Component\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightMap.h">
+      <Filter>Component\Renderer\Child</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlaneShadow.h">
+      <Filter>Component\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="AseParser.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="FrustumBox.h">
+      <Filter>Component\Renderer\Child</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="MainCore">
+      <UniqueIdentifier>{37aedeeb-ba41-49dd-9cf0-bc87daf2f5f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{c291919d-696f-46a6-b7fa-3236c77ab8f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX">
+      <UniqueIdentifier>{5e5d9acb-e79f-4997-8a6c-c3820f36d880}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{e0b31ade-720a-43c1-8b1f-abe4b4d06a23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{36ee0069-6e07-4c5d-9c34-f31f5b686c29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\GameObject">
+      <UniqueIdentifier>{157f432c-bc92-4142-8dce-e87418171728}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{0a8c9a30-ad72-4c26-99d8-5374033615f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Renderer">
+      <UniqueIdentifier>{de163a0a-2f85-493b-8877-6fc6b96c336f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Renderer\Child">
+      <UniqueIdentifier>{c77e35e6-4fba-4fc9-8128-2dcc4bd17131}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Renderer\Base">
+      <UniqueIdentifier>{c4b2a29a-24cd-4b55-a49d-885adf480944}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Effect">
+      <UniqueIdentifier>{5bc1303e-e677-4258-863f-67eefa1329d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Collider">
+      <UniqueIdentifier>{688faad6-7562-4108-bdc5-635deafa8464}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Basic">
+      <UniqueIdentifier>{13b60ea9-09c2-4bf0-9f10-0277b85ba652}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{e2203dfe-7bc3-4363-a152-be2ee34301dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server">
+      <UniqueIdentifier>{47d37799-1a2e-4f42-b1e7-8c9930b46eb7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\data\shader\Basis.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\data\shader\CubeMap.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\data\shader\EnviMap.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\data\shader\Instance.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\data\shader\NormalMap.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\data\shader\RenderTarget.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\data\shader\Shader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\data\shader\ShadowMap.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\data\shader\Final.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\data\shader\OutLine.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>

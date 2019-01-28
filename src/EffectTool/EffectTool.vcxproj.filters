@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="View">
+      <UniqueIdentifier>{90bff4f7-d67e-400f-9d49-0675665c6a99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pane">
+      <UniqueIdentifier>{991a5a47-5ba6-4c57-97df-2ff47272caaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialog">
+      <UniqueIdentifier>{c387c03a-326b-4fdc-a837-b706a03aab97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{d50dc35a-61a1-4b3f-afcd-dc166c58521c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Form">
+      <UniqueIdentifier>{479f03ce-d347-4cd3-b6cf-2a10974d113d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectToolView.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectToolDoc.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectTool.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>Form</Filter>
+    </ClInclude>
+    <ClInclude Include="Dialog_Inspector.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Dialog_Hierarchy.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Pane_Inspector.h">
+      <Filter>Pane</Filter>
+    </ClInclude>
+    <ClInclude Include="Pane_Hierarchy.h">
+      <Filter>Pane</Filter>
+    </ClInclude>
+    <ClInclude Include="Dialog_Preset.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Dialog_CParticle.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Dialog_CAnimation.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Pane_CAnimation.h">
+      <Filter>Pane</Filter>
+    </ClInclude>
+    <ClInclude Include="Dialog_CRenderer.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Pane_Component.h">
+      <Filter>Pane</Filter>
+    </ClInclude>
+    <ClInclude Include="Pane_Preset.h">
+      <Filter>Pane</Filter>
+    </ClInclude>
+    <ClInclude Include="Dialog_Null.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Dialog_CCollider.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Dialog_CTransformer.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="EffectToolView.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectToolDoc.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectTool.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>Form</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialog_Inspector.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialog_Hierarchy.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Pane_Inspector.cpp">
+      <Filter>Pane</Filter>
+    </ClCompile>
+    <ClCompile Include="Pane_Hierarchy.cpp">
+      <Filter>Pane</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialog_Preset.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialog_CParticle.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialog_CAnimation.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Pane_CAnimation.cpp">
+      <Filter>Pane</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialog_CRenderer.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Pane_Component.cpp">
+      <Filter>Pane</Filter>
+    </ClCompile>
+    <ClCompile Include="Pane_Preset.cpp">
+      <Filter>Pane</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialog_Null.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialog_CCollider.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialog_CTransformer.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="EffectTool.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\userimages.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\EffectToolDoc.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\EffectTool.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Toolbar256.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\EffectTool.rc2">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\data\script\sprite.txt" />
+  </ItemGroup>
+</Project>
