@@ -14,6 +14,12 @@ protected:
 	D3DXVECTOR3		m_Side = { 1.0f, 0.0f, 0.0f };	// 사이드 벡터
 	D3DXVECTOR3		m_Up   = { 0.0f, 1.0f, 0.0f };	// 직교 벡터
 public:
+	void LookAtVector(D3DXVECTOR3 target)							 noexcept;
+	void LookAtVectorY(float targetY)								 noexcept;
+	///
+	void SetFocus(const D3DXVECTOR3& target)						 noexcept;
+	void SetFocusDir(const D3DXVECTOR3& direction)					 noexcept;
+	void SetFocusZ(const D3DXVECTOR3& target)						 noexcept;
 	// 연산
 	void Transformation(const Transform& transform)					 noexcept;
 	void Translate(const D3DXVECTOR3& position)						 noexcept;
@@ -25,9 +31,6 @@ public:
 	void Rotate(const float& x, const float& y)						 noexcept;
 	void Scaling(const D3DXVECTOR3& scale)							 noexcept;
 	void Scaling(const float& x, const float& y, const float& z)	 noexcept;
-	///
-	void SetFocus(const D3DXVECTOR3& target)						 noexcept;
-	const float GetFocusY(const D3DXVECTOR3& target)				 noexcept;
 	// Setter
 	void SetTransform(const Transform& transform)					 noexcept;
 	void SetPosition(const D3DXVECTOR3& position)					 noexcept;

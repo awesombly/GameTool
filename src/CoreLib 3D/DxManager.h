@@ -15,7 +15,7 @@ enum class ERasterS : char {
 	CullFront,
 	Line,
 	DepthBias,
-	size					// 상태수
+	size					// 잉여
 };
 enum class EBlendS : char {
 	Current = 0,

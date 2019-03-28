@@ -4,6 +4,26 @@
 UINT Renderer::Stride = sizeof(Vertex_PNCT);
 UINT Renderer::Offset = 0;
 
+
+Renderer::Renderer(const wstring_view& myName, const string_view& vertexShaderName, const string_view& pixelShaderName) noexcept
+{
+	m_ppCamera = &ObjectManager::CurCamera;
+	m_myName = myName;
+	m_comptType = EComponent::Renderer;
+	SetShaderLayout(vertexShaderName, pixelShaderName);
+	SetSpriteList(L"None.png");
+
+	m_cbMaterial.useLight = 0.3f;
+	m_cbMaterial.useShadow = 0.5f;		// 쉐도우 비율
+	m_cbMaterial.useEnviMap = 0.0f;
+	m_cbMaterial.useNormalMap = 0.0f;
+	m_cbMaterial.ObjectID = 0.0f;
+	CreateConstBuffer(&m_cbMaterial, sizeof(m_cbMaterial), &m_pMaterialCBuffer);
+
+	CreateConstBuffer(&(*m_ppCamera)->m_cbVS, sizeof(CB_VSMatrix), &m_pMatrixCBuffer);
+	Init();
+}
+
 void Renderer::SetInfo(const wstring_view& myName, const EComponent& eComType, const wstring_view& srcName,
 				 const string_view& vertexShaderName, const string_view& pixelShaderName) noexcept
 {
@@ -17,7 +37,7 @@ void Renderer::SetInfo(const wstring_view& myName, const EComponent& eComType, c
 		m_srcName = srcName;
 	SetSpriteList(m_srcName);
 
-	m_cbMaterial.useLight = 1.0f;
+	m_cbMaterial.useLight = 0.3f;
 	m_cbMaterial.useShadow = 0.5f;		// 쉐도우 비율
 	m_cbMaterial.useEnviMap = 0.0f;
 	m_cbMaterial.useNormalMap= 0.0f;
@@ -59,7 +79,7 @@ bool Renderer::PrevRender(ID3D11DeviceContext* pDContext) noexcept
 	// 오브젝트 쉐이더, 버퍼, 리소스 설정 -> 드로우
 	pDContext->VSSetShader(m_pVShader, nullptr, 0);			// 정점쉐이더
 	pDContext->PSSetShader(m_pPShader, nullptr, 0);			// 픽셀 쉐이더
-	pDContext->GSSetShader(nullptr, nullptr, 0);			// 기하 쉐이더	
+	//pDContext->GSSetShader(nullptr, nullptr, 0);			// 기하 쉐이더	
 	pDContext->VSSetConstantBuffers(0, 1, &m_pMatrixCBuffer);		// 상수(행렬)
 	if (m_pMaterialCBuffer != nullptr)
 	{
@@ -378,7 +398,7 @@ void Renderer::UpdateConstBuffer(ID3D11DeviceContext* pDContext) noexcept
 		m_cbMaterial.matShadow = m_cbMaterial.matShadow * pLight->m_cbMaterial.matShadow;
 		D3DXMatrixTranspose(&m_cbMaterial.matShadow, &m_cbMaterial.matShadow);
 		m_cbMaterial.NumKernel = 3;
-		m_cbMaterial.ObjectID = 0;
+		//m_cbMaterial.ObjectID = 0;
 		*pMaterialData = m_cbMaterial;
 		pDContext->Unmap(m_pMaterialCBuffer, 0);
 	}
@@ -388,6 +408,8 @@ void Renderer::UpdateConstBuffer(ID3D11DeviceContext* pDContext) noexcept
 // 정점에 대한 정보를 GPU에 전달
 HRESULT Renderer::CreateVertexBuffer()
 {
+	if (m_vertexList.empty())
+		return E_FAIL;
 	D3D11_BUFFER_DESC initDesc = { 0, };
 	initDesc.ByteWidth = (UINT)(m_vertexList.size() * sizeof(m_vertexList.front()));	// 정점크기 * 갯수
 	initDesc.Usage = D3D11_USAGE_DEFAULT;				// 사용 모드(CPU->GPU 접근제어)
@@ -595,5 +617,8 @@ Component* Renderer::cloneAddition() noexcept
 {
 	m_pVertexBuffer = nullptr;
 	CreateVertexBuffer();
+
+	m_pMaterialCBuffer = nullptr;
+	CreateConstBuffer(&m_cbMaterial, sizeof(m_cbMaterial), &m_pMaterialCBuffer);
 	return this;
 }

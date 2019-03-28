@@ -40,13 +40,15 @@ bool SoundManager::Frame() noexcept
 
 
 	while (!m_SoundQueue.empty())
+	//if (!m_SoundQueue.empty())
 	{
-		auto&[soundName, position, range] = m_SoundQueue.back();
+		auto&[soundName, position, range] = m_SoundQueue.front();
 		if (m_SoundList.find(soundName) == m_SoundList.end())
 		{
 			ErrorMessage(__FUNCTION__ + " -> Sound Not Find : "s + soundName);
 			m_SoundQueue.pop();
-			continue;
+			//continue;
+			return true;
 		}
 
 		position = position - *m_pListenerPos;
@@ -88,6 +90,7 @@ void SoundManager::Load(const string_view& soundName, const bool& isPlay, const 
 
 	if (isPlay)
 	{
+		m_SoundList[soundName.data()].SetVolume(m_masterVolume);
 		m_pSystem->playSound(m_SoundList[soundName.data()].m_Sound, 0, false, &m_SoundList[soundName.data()].m_Channel);
 	}
 }
@@ -115,12 +118,13 @@ void SoundManager::Play(const string_view& soundName, const bool& isPlay) noexce
 	if (!isPlaying)
 	{
 		m_pSystem->playSound(m_SoundList[soundName.data()].m_Sound, 0, false, &m_SoundList[soundName.data()].m_Channel);
+		m_SoundList[soundName.data()].SetVolume(m_masterVolume);
 	}
 }
 
 void SoundManager::PlayVariation(string&& soundName, const bool& isPlay, const int& vCount) noexcept
 {
-	soundName = soundName + (char)('1' + (rand() % vCount));
+	soundName = soundName + (char)('1' + (rand() % vCount)) + ".mp3";
 	Play(soundName, isPlay);
 }
 
@@ -153,4 +157,9 @@ void SoundManager::SetMasterVolume(const float& value) noexcept
 	{
 		iter.second.SetVolume(value);
 	}*/
+}
+
+const float& SoundManager::GetMasterVolume() noexcept
+{
+	return m_masterVolume;
 }

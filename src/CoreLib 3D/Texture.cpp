@@ -1,6 +1,7 @@
 #include "Texture.h"
 #include "DxManager.h"
 #include <wrl.h>
+#include "LoadingParameter.h"
 
 Texture::Texture(ID3D11ShaderResourceView* pSRView) noexcept
 {
@@ -41,6 +42,9 @@ Texture* Texture::CreateShaderResourceView(const wstring_view& srcUrl) noexcept
 	src->Release();
 	tex2D->Release();
 
+	++LoadClass::LoadingCount;
+	LoadClass::LoadingString = srcUrl.data();
+	this_thread::sleep_for(chrono::milliseconds(20));
 	return this;
 }
 

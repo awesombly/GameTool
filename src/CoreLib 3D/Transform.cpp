@@ -1,6 +1,84 @@
 #include "Transform.h"
 #include "GameObject.h"
 
+
+void Transform::LookAtVector(D3DXVECTOR3 target) noexcept
+{
+	//target -= m_position;
+	m_rotation = { sinf(acosf(target.x)), cosf(acosf(target.x)), 0.0f, 1.0f };
+}
+
+void Transform::LookAtVectorY(float targetY) noexcept
+{
+	// targetY -= m_position.y;
+	m_rotation.y = acos(targetY);
+}
+
+void Transform::SetFocus(const D3DXVECTOR3& target) noexcept
+{
+	D3DXVECTOR3 forward, dirTarget;
+	forward = GetForward();
+	forward.y = 0.0f;
+	dirTarget = target - m_position;
+	dirTarget.y = 0.0f;
+	D3DXVec3Normalize(&forward, &forward);
+	D3DXVec3Normalize(&dirTarget, &dirTarget);
+	float fRadian = acosf(D3DXVec3Dot(&dirTarget, &forward));
+
+	if (_isnanf(fRadian))
+	{
+		//ErrorMessage(L"난 숫자 발생 : " + to_wstring(fRadian));
+		m_rotation.y = 0.0f;
+		return;
+	}
+
+	if (VectorDot(Normalize(GetRight()), dirTarget) > 0.0f)
+		m_rotation.y += fRadian;
+	else
+		m_rotation.y -= fRadian;
+}
+
+void Transform::SetFocusDir(const D3DXVECTOR3& direction) noexcept
+{
+	D3DXVECTOR3 forward, dirTarget;
+	forward = GetForward();
+	forward.y = 0.0f;
+	dirTarget = direction;
+	dirTarget.y = 0.0f;
+	D3DXVec3Normalize(&forward, &forward);
+	D3DXVec3Normalize(&dirTarget, &dirTarget);
+	float fRadian = acosf(D3DXVec3Dot(&dirTarget, &forward));
+
+	if (_isnanf(fRadian))
+	{
+		//ErrorMessage(L"난 숫자 발생 : " + to_wstring(fRadian));
+		m_rotation.y = 0.0f;
+		return;
+	}
+
+	if (VectorDot(Normalize(GetRight()), dirTarget) > 0.0f)
+		m_rotation.y += fRadian;
+	else
+		m_rotation.y -= fRadian;
+}
+
+void Transform::SetFocusZ(const D3DXVECTOR3& target) noexcept
+{
+	D3DXVECTOR3 forward, dirTarget;
+	forward = GetForward();
+	forward.x = 0.0f;
+	dirTarget = -target;
+	dirTarget.x = 0.0f;
+	D3DXVec3Normalize(&forward, &forward);
+	D3DXVec3Normalize(&dirTarget, &dirTarget);
+	float fRadian = acosf(D3DXVec3Dot(&dirTarget, &forward));
+
+	if (VectorDot(Normalize(GetRight()), forward) > 0.0f)
+		m_rotation.x += fRadian;
+	else
+		m_rotation.x -= fRadian;
+}
+
 Transform::Transform(const D3DXVECTOR3& position, const D3DXQUATERNION& rotation, const D3DXVECTOR3& scale) noexcept
 {
 	m_position = position;
@@ -13,7 +91,7 @@ void Transform::Transformation(const Transform& transform) noexcept
 	m_position += transform.m_position;
 	m_rotation += transform.m_rotation;
 	m_scale    += transform.m_scale;
-}
+}                                  
 void Transform::Translate(const D3DXVECTOR3& position) noexcept
 {
 	m_position += position;
@@ -59,42 +137,6 @@ void Transform::Scaling(const float& x, const float& y, const float& z) noexcept
 	m_scale.x += x;
 	m_scale.y += y;
 	m_scale.z += z;
-}
-void Transform::SetFocus(const D3DXVECTOR3& target) noexcept
-{
-	D3DXVECTOR3 forward, dirTarget;
-	forward = GetForward();
-	D3DXVec3Normalize(&forward, &forward);
-	forward.y = 0.0f;
-	dirTarget = target - m_position;
-	D3DXVec3Normalize(&dirTarget, &dirTarget);
-	dirTarget.y = 0.0f;
-	float fRadian = acosf(D3DXVec3Dot(&dirTarget, &forward));
-	
-	auto vRight = GetRight();
-	D3DXVec3Normalize(&vRight, &vRight);
-	if(D3DXVec3Dot(&vRight, &dirTarget) > 0.0f)
-		m_rotation.y = fRadian;
-	else
-		m_rotation.y = -fRadian;
-}
-const float Transform::GetFocusY(const D3DXVECTOR3& target) noexcept
-{
-	D3DXVECTOR3 forward, dirTarget;
-	forward = GetForward();
-	D3DXVec3Normalize(&forward, &forward);
-	forward.y = 0.0f;
-	dirTarget = target - m_position;
-	D3DXVec3Normalize(&dirTarget, &dirTarget);
-	dirTarget.y = 0.0f;
-	float fRadian = acosf(D3DXVec3Dot(&dirTarget, &forward));
-
-	auto vRight = GetRight();
-	D3DXVec3Normalize(&vRight, &vRight);
-	if (D3DXVec3Dot(&vRight, &dirTarget) > 0.0f)
-		return fRadian;
-	else
-		return -fRadian;
 }
 
 void Transform::SetTransform(const Transform& transform) noexcept

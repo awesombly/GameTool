@@ -337,6 +337,24 @@ void ParticleSystem::RemoveInstance(Particle* pParticle) noexcept
 	}
 }
 
+ParticleSystem* ParticleSystem::SetEffectScale(const float& scale)		noexcept
+{
+	m_minInitPosition	*= scale;
+	m_maxInitPosition	*= scale;
+	m_minInitScale		*= scale;
+	m_maxInitScale		*= scale;
+	
+	m_minMaxMoveSpeed	*= scale;
+	m_maxMaxMoveSpeed	*= scale;
+	m_minAccMoveSpeed	*= scale;
+	m_maxAccMoveSpeed	*= scale;
+	m_minCurMoveSpeed	*= scale;
+	m_maxCurMoveSpeed	*= scale;
+
+	m_minGravityPower	*= scale;
+	m_maxGravityPower	*= scale;
+	return this;
+}
 
 void ParticleSystem::SetParticle(Particle* pParticle, const bool& preParticleDelete) noexcept
 {

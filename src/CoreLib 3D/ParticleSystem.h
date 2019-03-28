@@ -71,7 +71,6 @@ class ParticleSystem : public ParticleInfo, public Renderer
 {
 private:
 	Particle* m_pParticle;
-	forward_list<Particle*> m_particleList;
 	stack<Particle*>		m_disabledParticle;
 
 	ID3D11Buffer*		 m_pBuffers[2];				  // 정점 + 인스턴스
@@ -84,6 +83,8 @@ private:
 	bool  m_isFollow			= false;
 	bool  m_needUpdateBuffer	= false;
 	float m_spawnFrame			= 0.0f;
+public:
+	forward_list<Particle*> m_particleList;
 private:
 	void	SpawnParticle()											noexcept;
 	HRESULT Create()												noexcept override;
@@ -97,6 +98,7 @@ private:
 
 	Component* cloneAddition()										noexcept override;
 public:
+	ParticleSystem* SetEffectScale(const float& scale)				noexcept;
 	void SetParticle(Particle* pParticle, const bool& preParticleDelete = true)	noexcept;
 	Particle* GetParticle()						noexcept;
 	// 리셋

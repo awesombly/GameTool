@@ -5,8 +5,6 @@ Texture2D	g_txNormalMap : register(t1);
 TextureCube g_txEnviMap   : register(t2);
 SamplerState samLinear : register (s0);
 
-// 노말값에 대한 반사율?
-static const float refAtNormal_Incidence = 1.33f;
 
 struct VS_OUTPUT_Envi
 {
@@ -73,11 +71,14 @@ VS_OUTPUT_Envi VS_Envi(VS_INPUT_PNCTT input)
 	output.pos = mul(output.pos, g_matProj);
 	
 	float3 vNormal = normalize(mul(input.nor, (float3x3)g_matNormal));
-	output.nor = float4(vNormal, (output.pos.w - NEAR) / (FAR - NEAR));
+	output.nor = float4(vNormal, (output.pos.w - fNEAR) / (fFAR - fNEAR));
 
+#ifdef DirectLight
+	float3 vLightDir = -cb_LightVector.xyz;
+#else
 	float3 vLightDir = normalize(cb_LightVector.xyz - WorldPos.xyz);
+#endif
 	float fDot = lerp(dot(vLightDir, output.nor.xyz), 1.0f, 0.15f) + 0.2f;
-	//float fDot = lerp(dot(-cb_LightVector.xyz, output.nor), 1.0f, 0.3f) + 0.3f;
 	output.col = float4(fDot, fDot, fDot, 1.0f) * input.col;
 	output.tex = input.tex;
 

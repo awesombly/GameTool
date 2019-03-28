@@ -8,11 +8,6 @@ SamplerState samLinear : register (s0);
 SamplerState samShadowMap : register(s1);
 SamplerComparisonState samComShadowMap : register (s2);
 
-static const int SMapSize = 1024;
-static const float EPSILON = 0.005f;
-// 노말값에 대한 반사율?
-static const float refAtNormal_Incidence = 1.33f;
-
 
 struct VS_OUTPUT_Mix
 {
@@ -53,11 +48,14 @@ VS_OUTPUT_Mix VS_Final(VS_INPUT_PNCTT input)
 	output.pos = mul(output.pos, g_matProj);
 
 	float3 vNormal = normalize(mul(input.nor, (float3x3)g_matNormal));
-	output.nor = float4(vNormal, (output.pos.w - NEAR) / (FAR - NEAR));
+	output.nor = float4(vNormal, (output.pos.w - fNEAR) / (fFAR - fNEAR));
 	output.tex = input.tex;
 
-	//float3 vLightDir = -cb_LightVector;// normalize(cb_LightVector.xyz - WorldPos.xyz);
+#ifdef DirectLight
+	float3 vLightDir = -cb_LightVector.xyz;
+#else
 	float3 vLightDir = normalize(cb_LightVector.xyz - WorldPos.xyz);
+#endif
 
 	// 노말
 	if(cb_useNormalMap)
@@ -77,11 +75,17 @@ VS_OUTPUT_Mix VS_Final(VS_INPUT_PNCTT input)
 		output.vEye = normalize(mul(output.vEye, matTangent));
 		output.col = input.col;
 	}
-	else
-	{
-		float fDot = lerp(dot(vLightDir, output.nor.xyz), 1.0f, 0.15f) + 0.2f;
-		output.col = float4(fDot, fDot, fDot, 1.0f) * input.col;
-	}
+	//else if (cb_useLight)
+	//{
+		//float fDot = lerp(dot(vLightDir, output.nor.xyz), 1.0f, 0.15f) + 0.2f;
+		//output.col = float4(fDot, fDot, fDot, 1.0f) * input.col;
+		output.col.xyz = input.col.xyz * max(0.1f, dot(vLightDir, output.nor.xyz) + cb_useLight);
+		output.col.w = input.col.w;
+	//}
+	//else
+	//{
+	//	output.col = input.col;
+	//}
 
 	// 환경
 	if(cb_useEnviMap)
@@ -141,7 +145,8 @@ PBUFFER_OUTPUT PS_Final(VS_OUTPUT_Mix input) : SV_Target
 				float fresnel = ComputeFresnel(input.ref, input.nor.xyz, r0);
 			
 				// 굴절, 반사 보간
-				output.color0 *= lerp(refractColor, reflectColor, fresnel * 7.0f)/* * input.col*/ * 1.15f;
+				//output.color0 *= lerp(refractColor, reflectColor, fresnel * 7.0f)/* * input.col*/ * 1.15f;
+				output.color0.xyz = lerp(output.color0.xyz, lerp(refractColor.xyz, reflectColor.xyz, fresnel * 7.0f), 0.15f)/* * input.col*/;
 				//color = lerp(refractColor, color, fresnel * 0.1f);
 				//color.a = 1.0f;
 			} break;
@@ -165,17 +170,17 @@ PBUFFER_OUTPUT PS_Final(VS_OUTPUT_Mix input) : SV_Target
 
 		// 최종 컬러 조합
 		//return vDiffuseColor * float4(LightColor + SpecularColor, 1.0f) * input.col;
-		output.color0 *= float4(LightColor + SpecularColor + 0.2f, 1.0f)/* * input.col*/;
+		output.color0 *= float4(max(cb_useLight, LightColor + SpecularColor + 0.2f), 1.0f)/* * input.col*/;
 	}
-	// 음영 /// 음영 끄면 color도 미적용됨..
-	if (cb_useLight)
-	{
-		output.color0 *= input.col * cb_useLight;
-	}
+	/// 음영 /// 음영 끄면 color도 미적용됨..
+	//if (cb_useLight)
+	//{
+		output.color0 *= input.col;
+	//}
 	// 쉐도우
 	if(cb_useShadow)
 	{
-		static const float	iNumKernel = 3;
+		static const float iNumKernel = 3;
 		float fLightAmount = 0.0f;
 		float3 ShadowTexColor = input.TexShadow.xyz / input.TexShadow.w;
 
@@ -199,6 +204,6 @@ PBUFFER_OUTPUT PS_Final(VS_OUTPUT_Mix input) : SV_Target
 		//output.color0 = cb_useShadow > fLightAmount ? output.color0 * cb_useShadow : output.color0;
 	}
 	
-	output.color0.w = 1.0f;
+	output.color0.w = input.col.w;
 	return  output;
 }

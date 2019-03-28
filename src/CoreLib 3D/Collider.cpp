@@ -2,8 +2,9 @@
 #include "ColliderAABB.h"
 #include "ColliderOBB.h"
 #include "ObjectManager.h"
+//#include "q3Mat3.h"
 
-const float Collider::PushPower = 40.0f;
+const float Collider::PushPower = 180.0f;
 
 
 
@@ -77,7 +78,7 @@ bool Collider::CollisionAllCheck(const float& spf) noexcept
 	for (auto& iter : m_IgnoreList)
 	{
 		m_CollisionList.push_front(iter);
-	}
+	} 
 	m_CollisionList.push_front(this);
 
 	for (auto& iter : ObjectManager::Get().GetColliderList())
@@ -90,77 +91,80 @@ bool Collider::CollisionAllCheck(const float& spf) noexcept
 		// 자신 또는 처리된 객체 제외
 		auto finder = std::find(m_CollisionList.begin(), m_CollisionList.end(), iter);
 		if(finder != m_CollisionList.end())
-		{
 			continue;
-		}
-		if (CollisionCheck(iter))
+
+		if (m_eTagArray[iter->m_eTag] && iter->m_eTagArray[m_eTag])
 		{
-			// 상대 충돌 목록 추가
-			iter->m_CollisionList.push_front(this);
-
-			/////D3DXVECTOR3 vDirection		= Vector3::Zero;
-			////D3DXVECTOR3 vForceDis		= Vector3::Zero;
-			////D3DXVECTOR3 vForceDisOther	= Vector3::Zero;
-			/////// 반작용
-			/////vForceDis = iter->GetTotalForce();
-			/////
-			/////vForceDisOther = GetTotalForce();
-			///////vDirection = iter->GetCenter() - GetCenter();
-			///////D3DXVec3Normalize(&vDirection, &vDirection);
-			///////vForceDisOther = -iter->GetTotalForce();
-			///////vForceDisOther = D3DXVec3Dot(&vForceDis, &vDirection) * 2.0f * vDirection - vForceDis;
-			/////
-			/////
-			///////vDirection = iter->GetCenter() - GetCenter();
-			///////D3DXVec3Normalize(&vDirection, &vDirection);
-			///////vForceDisOther = m_force - iter->m_force;
-			///////vForceDisOther = vDirection * (m_mass / iter->m_mass) * D3DXVec3Length(&vForceDisOther);
-			/////
-			/////
-			////
-			////vForceDis = iter->GetTotalForce();
-			////vForceDisOther = GetTotalForce();
-			////if (m_pPhysics->m_usePhysics)
-			////{
-			////	//m_force += vForceDis;
-			////	//D3DXVec3Normalize(&vForceDis, &m_force);
-			////	// 반발력
-			////	m_pPhysics->m_force = /*vForceDis +*/ -m_pPhysics->m_force * (m_pPhysics->m_repulsion + iter->m_pPhysics->m_repulsion) * 0.5f;
-			////	//m_pParent->Translate(-m_force * 0.001f);
-			////	//m_pParent->Translate(Vector3::Up * spf);
-			////}
-			////if (iter->m_pPhysics->m_usePhysics)
-			////{
-			////	//iter->m_force += vForceDisOther;
-			////	//D3DXVec3Normalize(&vForceDisOther, &iter->m_force);
-			////	iter->m_pPhysics->m_force = /*vForceDisOther +*/ -iter->m_pPhysics->m_force * (m_pPhysics->m_repulsion + iter->m_pPhysics->m_repulsion) * 0.5f;
-			////	//iter->m_pParent->Translate(-iter->m_force * 0.001f);
-			////	//iter->m_pParent->Translate(Vector3::Up * spf);
-			////}
-			////// 마찰력
-			////m_pPhysics->m_force		  -= m_pPhysics->m_force		* (m_pPhysics->m_drag + iter->m_pPhysics->m_drag) * 0.5f  * spf;
-			////iter->m_pPhysics->m_force -= iter->m_pPhysics->m_force	* (m_pPhysics->m_drag + iter->m_pPhysics->m_drag) * 0.5f  * spf;
-			////
-			//////m_force = Vector3::Zero;
-			//////iter->m_force = Vector3::Zero;
-
-			if (m_pPhysics->m_usePhysics && iter->m_eTag != ETag::Dummy)
+			if (CollisionCheck(iter))
 			{
-				m_pPhysics->m_force = Normalize(GetCenter() - iter->GetCenter()) * (m_pPhysics->m_repulsion + iter->m_pPhysics->m_repulsion) * PushPower;
-				if(m_pPhysics->m_isMoving)
-					m_pParent->Translate(-m_pPhysics->m_direction * spf);
+				//if (!m_pParent->isEnable())
+					//return false;
+				//if (!iter->m_pParent->isEnable())
+					//continue;
+				// 상대 충돌 목록 추가
+				iter->m_CollisionList.push_front(this);
+
+				/////D3DXVECTOR3 vDirection		= Vector3::Zero;
+				////D3DXVECTOR3 vForceDis		= Vector3::Zero;
+				////D3DXVECTOR3 vForceDisOther	= Vector3::Zero;
+				/////// 반작용
+				/////vForceDis = iter->GetTotalForce();
+				/////
+				/////vForceDisOther = GetTotalForce();
+				///////vDirection = iter->GetCenter() - GetCenter();
+				///////D3DXVec3Normalize(&vDirection, &vDirection);
+				///////vForceDisOther = -iter->GetTotalForce();
+				///////vForceDisOther = D3DXVec3Dot(&vForceDis, &vDirection) * 2.0f * vDirection - vForceDis;
+				/////
+				/////
+				///////vDirection = iter->GetCenter() - GetCenter();
+				///////D3DXVec3Normalize(&vDirection, &vDirection);
+				///////vForceDisOther = m_force - iter->m_force;
+				///////vForceDisOther = vDirection * (m_mass / iter->m_mass) * D3DXVec3Length(&vForceDisOther);
+				////vForceDis = iter->GetTotalForce();
+				////vForceDisOther = GetTotalForce();
+				////if (m_pPhysics->m_usePhysics)
+				////{
+				////	//m_force += vForceDis;
+				////	//D3DXVec3Normalize(&vForceDis, &m_force);
+				////	// 반발력
+				////	m_pPhysics->m_force = /*vForceDis +*/ -m_pPhysics->m_force * (m_pPhysics->m_repulsion + iter->m_pPhysics->m_repulsion) * 0.5f;
+				////	//m_pParent->Translate(-m_force * 0.001f);
+				////	//m_pParent->Translate(Vector3::Up * spf);
+				////}
+				////if (iter->m_pPhysics->m_usePhysics)
+				////{
+				////	//iter->m_force += vForceDisOther;
+				////	//D3DXVec3Normalize(&vForceDisOther, &iter->m_force);
+				////	iter->m_pPhysics->m_force = /*vForceDisOther +*/ -iter->m_pPhysics->m_force * (m_pPhysics->m_repulsion + iter->m_pPhysics->m_repulsion) * 0.5f;
+				////	//iter->m_pParent->Translate(-iter->m_force * 0.001f);
+				////	//iter->m_pParent->Translate(Vector3::Up * spf);
+				////}
+				////// 마찰력
+				////m_pPhysics->m_force		  -= m_pPhysics->m_force		* (m_pPhysics->m_drag + iter->m_pPhysics->m_drag) * 0.5f  * spf;
+				////iter->m_pPhysics->m_force -= iter->m_pPhysics->m_force	* (m_pPhysics->m_drag + iter->m_pPhysics->m_drag) * 0.5f  * spf;
+				////
+				//////m_force = Vector3::Zero;
+				//////iter->m_force = Vector3::Zero;
+
+				if (usePhysics())// && iter->m_eTag != ETag::Dummy)
+				{
+					m_pPhysics->m_force = Normalize(GetCenter() - iter->GetCenter()) * (m_pPhysics->m_repulsion + iter->m_pPhysics->m_repulsion) * PushPower;
+					if (m_pPhysics->m_isMoving)
+						m_pParent->Translate(-m_pPhysics->m_direction * spf);
+				}
+				if (iter->usePhysics())// && m_eTag != ETag::Dummy)
+				{
+					iter->m_pPhysics->m_force = Normalize(iter->GetCenter() - GetCenter()) * (m_pPhysics->m_repulsion + iter->m_pPhysics->m_repulsion) * PushPower;
+					if (m_pPhysics->m_isMoving)
+						iter->m_pParent->Translate(-iter->m_pPhysics->m_direction * spf);
+				}
+				// 충돌 이벤트
+				if (CollisionEvent != nullptr)
+					CollisionEvent(this, iter);
+				if (iter->CollisionEvent != nullptr)
+					iter->CollisionEvent(iter, this);
 			}
-			if (iter->m_pPhysics->m_usePhysics && m_eTag != ETag::Dummy)
-			{
-				iter->m_pPhysics->m_force = Normalize(iter->GetCenter() - GetCenter()) * (m_pPhysics->m_repulsion + iter->m_pPhysics->m_repulsion) * PushPower;
-				if (m_pPhysics->m_isMoving)
-					iter->m_pParent->Translate(-iter->m_pPhysics->m_direction * spf);
-			}
-			// 충돌 이벤트
-			if (CollisionEvent != nullptr)
-				CollisionEvent(this, iter);
-			if (iter->CollisionEvent != nullptr)
-				iter->CollisionEvent(iter, this);
 		}
 	}
 	return true;
@@ -194,97 +198,97 @@ bool Collider::CollisionCheck(Collider* pCollider) noexcept
 }
 
 
-bool Collider::SphereToSphere(Collider* pSphereA, Collider* pSphereB) const	noexcept
+bool Collider::SphereToSphere(Collider* pA, Collider* pB) const	noexcept
 {
-	auto vRange = pSphereA->GetCenter() - pSphereB->GetCenter();
+	auto vRange = pA->GetCenter() - pB->GetCenter();
 	float distance = D3DXVec3Length(&vRange);
 	// 충돌
-	if (distance < (pSphereA->GetWorldRadius() + pSphereB->GetWorldRadius()))
+	if (distance < (pA->GetWorldRadius() + pB->GetWorldRadius()))
 	{
-		//m_normal = pSphereB->GetCenter() - pSphereA->GetCenter();
+		//m_normal = pB->GetCenter() - pA->GetCenter();
 		//D3DXVec3Normalize(&m_normal, &m_normal);
-		//pSphereB->m_normal = -m_normal;
+		//pB->m_normal = -m_normal;
 		return true;
 	}
 	return false;
 }
 
-bool Collider::SphereToAABB(Collider* pSphere, ColliderAABB* pAABB)	const noexcept
+bool Collider::SphereToAABB(Collider* pA, ColliderAABB* pB)	const noexcept
 {
 	D3DXVECTOR3 nearPoint = Vector3::Zero;
 
 	// x 비교
-	if (pSphere->GetCenter().x < (nearPoint.x = pAABB->GetCenter().x - pAABB->GetLength().x * 0.5f))
+	if (pA->GetCenter().x < (nearPoint.x = pB->GetCenter().x - pB->GetLength().x * 0.5f))
 	{	}
-	else if (pSphere->GetCenter().x > (nearPoint.x = pAABB->GetCenter().x + pAABB->GetLength().x * 0.5f))
+	else if (pA->GetCenter().x > (nearPoint.x = pB->GetCenter().x + pB->GetLength().x * 0.5f))
 	{	}
 	else
 	{
-		nearPoint.x = pSphere->GetCenter().x;
+		nearPoint.x = pA->GetCenter().x;
 	}
 	// y 비교
-	if (pSphere->GetCenter().y < (nearPoint.y = pAABB->GetCenter().y - pAABB->GetLength().y * 0.5f))
+	if (pA->GetCenter().y < (nearPoint.y = pB->GetCenter().y - pB->GetLength().y * 0.5f))
 	{	}
-	else if (pSphere->GetCenter().y > (nearPoint.y = pAABB->GetCenter().y + pAABB->GetLength().y * 0.5f))
+	else if (pA->GetCenter().y > (nearPoint.y = pB->GetCenter().y + pB->GetLength().y * 0.5f))
 	{	}
 	else
 	{
-		nearPoint.y = pSphere->GetCenter().y;
+		nearPoint.y = pA->GetCenter().y;
 	}
 	// z 비교
-	if (pSphere->GetCenter().z < (nearPoint.z = pAABB->GetCenter().z - pAABB->GetLength().z * 0.5f))
+	if (pA->GetCenter().z < (nearPoint.z = pB->GetCenter().z - pB->GetLength().z * 0.5f))
 	{	}
-	else if (pSphere->GetCenter().z > (nearPoint.z = pAABB->GetCenter().z + pAABB->GetLength().z * 0.5f))
+	else if (pA->GetCenter().z > (nearPoint.z = pB->GetCenter().z + pB->GetLength().z * 0.5f))
 	{	}
 	else
 	{
-		nearPoint.z = pSphere->GetCenter().z;
+		nearPoint.z = pA->GetCenter().z;
 	}
 
-	auto vDistance = pSphere->GetCenter() - nearPoint;
-	if ((D3DXVec3Length(&vDistance) - pSphere->GetWorldRadius()) <= 0)
+	auto vDistance = pA->GetCenter() - nearPoint;
+	if ((D3DXVec3Length(&vDistance) - pA->GetWorldRadius()) <= 0)
 	{
-		//pSphere->m_normal = pAABB->GetCenter() - nearPoint;
-		//D3DXVec3Normalize(&pSphere->m_normal, &pSphere->m_normal);
-		//pAABB->m_normal = -pSphere->m_normal;
+		//pA->m_normal = pB->GetCenter() - nearPoint;
+		//D3DXVec3Normalize(&pA->m_normal, &pA->m_normal);
+		//pB->m_normal = -pA->m_normal;
 		return true;
 	}
 	return false;
 }
 
-bool Collider::SphereToOBB(Collider* pSphere, ColliderOBB* pOBB) const noexcept
+bool Collider::SphereToOBB(Collider* pA, ColliderOBB* pB) const noexcept
 {
 	// 최단점
 	D3DXVECTOR3 nearPoint = Vector3::Zero;
 	// 구 -> OBB 박스 좌표계 변환
-	D3DXVECTOR3 tempCenter = pSphere->GetCenter() - pOBB->GetCenter();
-	D3DXVECTOR3 newCenter = { D3DXVec3Dot(&tempCenter, &pOBB->m_rotate[0]),
-							  D3DXVec3Dot(&tempCenter, &pOBB->m_rotate[1]),
-							  D3DXVec3Dot(&tempCenter, &pOBB->m_rotate[2]) };
-	newCenter += pOBB->GetCenter();
+	D3DXVECTOR3 tempCenter = pA->GetCenter() - pB->GetCenter();
+	D3DXVECTOR3 newCenter = { D3DXVec3Dot(&tempCenter, &pB->m_rotate[0]),
+							  D3DXVec3Dot(&tempCenter, &pB->m_rotate[1]),
+							  D3DXVec3Dot(&tempCenter, &pB->m_rotate[2]) };
+	newCenter += pB->GetCenter();
 
 	// x 비교
-	if (newCenter.x < (nearPoint.x = pOBB->GetCenter().x - pOBB->GetExtents().x))
+	if (newCenter.x < (nearPoint.x = pB->GetCenter().x - pB->GetExtents().x))
 	{	}
-	else if (newCenter.x > (nearPoint.x = pOBB->GetCenter().x + pOBB->GetExtents().x))
+	else if (newCenter.x > (nearPoint.x = pB->GetCenter().x + pB->GetExtents().x))
 	{	}
 	else
 	{
 		nearPoint.x = newCenter.x;
 	}
 	// y 비교
-	if (newCenter.y < (nearPoint.y = pOBB->GetCenter().y - pOBB->GetExtents().y))
+	if (newCenter.y < (nearPoint.y = pB->GetCenter().y - pB->GetExtents().y))
 	{	}
-	else if (newCenter.y > (nearPoint.y = pOBB->GetCenter().y + pOBB->GetExtents().y))
+	else if (newCenter.y > (nearPoint.y = pB->GetCenter().y + pB->GetExtents().y))
 	{	}
 	else
 	{
 		nearPoint.y = newCenter.y;
 	}
 	// z 비교
-	if (newCenter.z < (nearPoint.z = pOBB->GetCenter().z - pOBB->GetExtents().z))
+	if (newCenter.z < (nearPoint.z = pB->GetCenter().z - pB->GetExtents().z))
 	{	}
-	else if (newCenter.z > (nearPoint.z = pOBB->GetCenter().z + pOBB->GetExtents().z))
+	else if (newCenter.z > (nearPoint.z = pB->GetCenter().z + pB->GetExtents().z))
 	{	}
 	else
 	{
@@ -292,23 +296,23 @@ bool Collider::SphereToOBB(Collider* pSphere, ColliderOBB* pOBB) const noexcept
 	}
 
 	auto vDistance = newCenter - nearPoint;
-	if ((D3DXVec3Length(&vDistance) - pSphere->GetWorldRadius()) <= 0)
+	if ((D3DXVec3Length(&vDistance) - pA->GetWorldRadius()) <= 0)
 	{
-		//pSphere->m_normal = pOBB->GetCenter() - nearPoint;
-		//D3DXVec3Normalize(&pSphere->m_normal, &pSphere->m_normal);
-		//pOBB->m_normal = -pSphere->m_normal;
+		//pA->m_normal = pB->GetCenter() - nearPoint;
+		//D3DXVec3Normalize(&pA->m_normal, &pA->m_normal);
+		//pB->m_normal = -pA->m_normal;
 		return true;
 	}
 	return false;
 }
 
-bool Collider::AABBToAABB(ColliderAABB* ApAABB, ColliderAABB* BpAABB) const noexcept
+bool Collider::AABBToAABB(ColliderAABB* pA, ColliderAABB* pB) const noexcept
 {
 	// 충돌
-	auto&& thisMin = ApAABB->GetCenter() + ApAABB->GetMin();
-	auto&& thisMax = ApAABB->GetCenter() + ApAABB->GetMax();
-	auto&& otherMin = BpAABB->GetCenter() + BpAABB->GetMin();
-	auto&& otherMax = BpAABB->GetCenter() + BpAABB->GetMax();
+	auto&& thisMin = pA->GetCenter() + pA->GetMin();
+	auto&& thisMax = pA->GetCenter() + pA->GetMax();
+	auto&& otherMin = pB->GetCenter() + pB->GetMin();
+	auto&& otherMax = pB->GetCenter() + pB->GetMax();
 	if (std::max<float>(thisMin.x, otherMin.x) < std::min<float>(thisMax.x, otherMax.x) &&
 		std::max<float>(thisMin.y, otherMin.y) < std::min<float>(thisMax.y, otherMax.y) &&
 		std::max<float>(thisMin.z, otherMin.z) < std::min<float>(thisMax.z, otherMax.z))
@@ -318,25 +322,28 @@ bool Collider::AABBToAABB(ColliderAABB* ApAABB, ColliderAABB* BpAABB) const noex
 	return false;
 }
 
-bool Collider::AABBToOBB(ColliderAABB* pAABB, ColliderOBB* pOBB) const noexcept
+bool Collider::AABBToOBB(ColliderAABB* pA, ColliderOBB* pB) const noexcept
 {
-	D3DXVECTOR3 preMin = pAABB->GetCenter() + pAABB->GetMin();
-	D3DXVECTOR3 preMax = pAABB->GetCenter() + pAABB->GetMax();
+	auto CenterA = pA->GetCenter();
+	auto CenterB = pB->GetCenter();
+	auto ExtentsB = pB->GetExtents();
+	D3DXVECTOR3 preMin = CenterA + pA->GetMin();
+	D3DXVECTOR3 preMax = CenterA + pA->GetMax();
 	// AABB -> OBB 좌표 변환(min)
-	D3DXVECTOR3 tempMin = preMin - pOBB->GetCenter();
-	D3DXVECTOR3 thisMin = {	  D3DXVec3Dot(&tempMin, &pOBB->m_pParent->GetRight()),
-							  D3DXVec3Dot(&tempMin, &pOBB->m_pParent->GetUp()),
-							  D3DXVec3Dot(&tempMin, &pOBB->m_pParent->GetForward()) };
-	thisMin += pOBB->GetCenter();
+	D3DXVECTOR3 tempMin = preMin - CenterB;
+	D3DXVECTOR3 thisMin = {	  D3DXVec3Dot(&tempMin, &pB->m_pParent->GetRight()),
+							  D3DXVec3Dot(&tempMin, &pB->m_pParent->GetUp()),
+							  D3DXVec3Dot(&tempMin, &pB->m_pParent->GetForward()) };
+	thisMin += CenterB;
 	// AABB -> OBB 좌표 변환(max)
-	D3DXVECTOR3 tempMax = preMax - pOBB->GetCenter();
-	D3DXVECTOR3 thisMax = {   D3DXVec3Dot(&tempMax, &pOBB->m_pParent->GetRight()),
-							  D3DXVec3Dot(&tempMax, &pOBB->m_pParent->GetUp()),
-							  D3DXVec3Dot(&tempMax, &pOBB->m_pParent->GetForward()) };
-	thisMax += pOBB->GetCenter();
+	D3DXVECTOR3 tempMax = preMax - CenterB;
+	D3DXVECTOR3 thisMax = {   D3DXVec3Dot(&tempMax, &pB->m_pParent->GetRight()),
+							  D3DXVec3Dot(&tempMax, &pB->m_pParent->GetUp()),
+							  D3DXVec3Dot(&tempMax, &pB->m_pParent->GetForward()) };
+	thisMax += CenterB;
 	//
-	auto&& otherMin = pOBB->GetCenter() - pOBB->GetExtents();
-	auto&& otherMax = pOBB->GetCenter() + pOBB->GetExtents();
+	auto&& otherMin = CenterB - ExtentsB;
+	auto&& otherMax = CenterB + ExtentsB;
 	if (std::max<float>(thisMin.x, otherMin.x) < std::min<float>(thisMax.x, otherMax.x) &&
 		std::max<float>(thisMin.y, otherMin.y) < std::min<float>(thisMax.y, otherMax.y) &&
 		std::max<float>(thisMin.z, otherMin.z) < std::min<float>(thisMax.z, otherMax.z))
@@ -346,15 +353,15 @@ bool Collider::AABBToOBB(ColliderAABB* pAABB, ColliderOBB* pOBB) const noexcept
 	return false;
 }
 
-bool Collider::OBBToOBB(ColliderOBB* ApOBB, ColliderOBB* BpOBB) const noexcept
+bool Collider::OBBToOBB(ColliderOBB* pA, ColliderOBB* pB) const noexcept
 {
 	// translation, in parent frame (note: A = this, B = obb)
 	// translation, in A's frame
 
-	D3DXVECTOR3 v = BpOBB->GetCenter() - ApOBB->GetCenter();
-	D3DXVECTOR3 T = { D3DXVec3Dot(&v, &ApOBB->m_rotate[0]),
-					  D3DXVec3Dot(&v, &ApOBB->m_rotate[1]),
-					  D3DXVec3Dot(&v, &ApOBB->m_rotate[2]) };
+	D3DXVECTOR3 v = pB->GetCenter() - pA->GetCenter();
+	D3DXVECTOR3 T = { D3DXVec3Dot(&v, &pA->m_rotate[0]),
+					  D3DXVec3Dot(&v, &pA->m_rotate[1]),
+					  D3DXVec3Dot(&v, &pA->m_rotate[2]) };
 	// B's basis with respect to A's local frame
 	float R[3][3];
 	float FR[3][3];
@@ -365,7 +372,7 @@ bool Collider::OBBToOBB(ColliderOBB* ApOBB, ColliderOBB* BpOBB) const noexcept
 	{
 		for (int in = 0; in < 3; ++in)
 		{
-			R[out][in] = D3DXVec3Dot(&ApOBB->m_rotate[out], &BpOBB->m_rotate[in]);
+			R[out][in] = D3DXVec3Dot(&pA->m_rotate[out], &pB->m_rotate[in]);
 			// fabs and shift borrowed from RAPID
 			FR[out][in] = 1e-6f + abs(R[out][in]);
 		}
@@ -373,8 +380,8 @@ bool Collider::OBBToOBB(ColliderOBB* ApOBB, ColliderOBB* BpOBB) const noexcept
 
 	// Separating axis theorem: test of all 15 potential separating axes
 	// These axes are always parallel to each OBB edges or its normal plane
-	D3DXVECTOR3 a = ApOBB->GetExtents();
-	D3DXVECTOR3 b = BpOBB->GetExtents();
+	D3DXVECTOR3 a = pA->GetExtents();
+	D3DXVECTOR3 b = pB->GetExtents();
 
 	// First stage: each obb's axis!
 	//A's basis vectors

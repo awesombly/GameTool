@@ -53,7 +53,7 @@ bool Input::Frame() noexcept
 	KeyCheck('O');		KeyCheck('P');		KeyCheck('L');
 
 
-	if (GetKeyState(VK_ESCAPE) == EKeyState::DOWN)
+	if (GetKeyState(VK_TAB) == EKeyState::DOWN)
 	{
 		isDebug = !isDebug;
 	}

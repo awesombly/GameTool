@@ -7,9 +7,6 @@ SamplerState samLinear : register (s0);
 SamplerState samShadowMap : register(s1);
 SamplerComparisonState samComShadowMap : register (s2);
 
-static const int SMapSize = 1024;
-static const float EPSILON = 0.005f;
-
 
 struct VS_OUTPUT_Shadow
 {
@@ -86,14 +83,14 @@ float4 PS_NO_CMP(VS_OUTPUT_Shadow input) : SV_Target
 		float2 lerps = frac(texelpos);
 		//read in bilerp stamp, doing the shadow checks
 		float sourcevals[4];
-		sourcevals[0] = (g_txDepthMap.Sample(samShadowMap, ShadowTexC) + EPSILON < vPosLight.z / vPosLight.w)
+		sourcevals[0] = (g_txDepthMap.Sample(samShadowMap, ShadowTexC) + fEPSILON < vPosLight.z / vPosLight.w)
 			? 0.0f : 1.0f;
 		sourcevals[1] = (g_txDepthMap.Sample(samShadowMap, ShadowTexC
-											 + float2(1.0f / SMapSize, 0)) + EPSILON < vPosLight.z / vPosLight.w) ? 0.0f : 1.0f;
+											 + float2(1.0f / SMapSize, 0)) + fEPSILON < vPosLight.z / vPosLight.w) ? 0.0f : 1.0f;
 		sourcevals[2] = (g_txDepthMap.Sample(samShadowMap, ShadowTexC
-											 + float2(0.0f, 1.0f / SMapSize)) + EPSILON < vPosLight.z / vPosLight.w) ? 0.0f : 1.0f;
+											 + float2(0.0f, 1.0f / SMapSize)) + fEPSILON < vPosLight.z / vPosLight.w) ? 0.0f : 1.0f;
 		sourcevals[3] = (g_txDepthMap.Sample(samShadowMap, ShadowTexC
-											 + float2(1.0f / SMapSize, 1.0 / SMapSize)) + EPSILON < vPosLight.z / vPosLight.w) ? 0.0f : 1.0f;
+											 + float2(1.0f / SMapSize, 1.0 / SMapSize)) + fEPSILON < vPosLight.z / vPosLight.w) ? 0.0f : 1.0f;
 		// lerp between the shadow values to calculate our light amount
 		LightAmount = lerp(lerp(sourcevals[0], sourcevals[1], lerps.x),
 						   lerp(sourcevals[2], sourcevals[3], lerps.x),
@@ -115,7 +112,18 @@ VS_OUTPUT_DepthMap VS_DepthMap(VS_INPUT_PNCTT input)
 	output.pos = mul(output.pos, g_matView);
 	output.pos = mul(output.pos, g_matProj);
 	output.dep = output.pos.zw;
-	//output.dep.y = (output.pos.w - NEAR) / (FAR - NEAR);
+	output.dep.y = (output.pos.w - fNEAR) / (fFAR - fNEAR);
+	return output;
+}
+
+VS_OUTPUT_DepthMap VS_DepthMapPNCT(VS_INPUT_PNCT input)
+{
+	VS_OUTPUT_DepthMap output = (VS_OUTPUT_DepthMap)0;
+	output.pos = mul(float4(input.pos, 1.0f), g_matWorld);
+	output.pos = mul(output.pos, g_matView);
+	output.pos = mul(output.pos, g_matProj);
+	output.dep = output.pos.zw;
+	output.dep.y = (output.pos.w - fNEAR) / (fFAR - fNEAR);
 	return output;
 }
 //--------------------------------------------------------------------------------------

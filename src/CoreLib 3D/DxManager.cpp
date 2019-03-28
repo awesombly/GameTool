@@ -57,6 +57,7 @@ void DxManager::InitLoadShader() noexcept
 	// ±íÀÌ¸Ê ½¦µµ¿ì
 	LoadVertexShader(L"../../data/shader/ShadowMap.hlsl", "VS_Shadow");
 	LoadVertexShader(L"../../data/shader/ShadowMap.hlsl", "VS_DepthMap");
+	//LoadVertexShader(L"../../data/shader/ShadowMap.hlsl", "VS_DepthMapPNCT");
 	LoadPixelShader(L"../../data/shader/ShadowMap.hlsl", "PS_Shadow");
 	LoadPixelShader(L"../../data/shader/ShadowMap.hlsl", "PS_DepthMap");
 	LoadPixelShader(L"../../data/shader/ShadowMap.hlsl", "PS_NO_CMP");
@@ -128,19 +129,21 @@ bool DxManager::Frame() noexcept
 	else if (Input::GetKeyState(VK_F2) == EKeyState::DOWN)
 	{
 		m_RasterList[ERasterS::Current] = m_RasterList[ERasterS::Basic];
-		SetBlendState(EBlendS::Basic);
+		m_BlenderList[EBlendS::Current] = m_BlenderList[EBlendS::NoAlpha];
 		m_RTDSView.m_pScreen->SetPixelShader("PS_MRT_Normal");
 	}
 	else if (Input::GetKeyState(VK_F3) == EKeyState::DOWN)
 	{
 		m_RasterList[ERasterS::Current] = m_RasterList[ERasterS::Basic];
-		SetBlendState(EBlendS::Current);
+		m_BlenderList[EBlendS::Current] = m_BlenderList[EBlendS::Basic];
+		m_DepthList[EDepthS::Current] = m_DepthList[EDepthS::Basic];
 		m_RTDSView.m_pScreen->SetPixelShader("PS_MRT_None");
 	}
 	else if (Input::GetKeyState(VK_F4) == EKeyState::DOWN)
 	{
 		m_RasterList[ERasterS::Current] = m_RasterList[ERasterS::Basic];
-		SetBlendState(EBlendS::Current);
+		m_BlenderList[EBlendS::Current] = m_BlenderList[EBlendS::Basic];
+		m_DepthList[EDepthS::Current] = m_DepthList[EDepthS::Basic];
 		m_RTDSView.m_pScreen->SetPixelShader("PS_MRT");
 	}
 
@@ -437,7 +440,8 @@ HRESULT DxManager:: CreateRasterizerState()
 	RSDesc.DepthClipEnable = true;
 	RSDesc.FillMode = D3D11_FILL_SOLID;
 	RSDesc.CullMode = D3D11_CULL_BACK;
-	RSDesc.DepthBias = 2000;
+	//RSDesc.DepthBias = 6;
+	RSDesc.DepthBias = 1000;
 	RSDesc.DepthBiasClamp = 0.0f;
 	RSDesc.SlopeScaledDepthBias = 1.0f;
 	m_RasterList[ERasterS::DepthBias]->SetRasterizerState(RSDesc);
@@ -507,6 +511,7 @@ HRESULT DxManager::CreateDepthStencilState()
 	dsDescDepth.StencilEnable = true;
 	m_pD3dDevice->CreateDepthStencilState(&dsDescDepth, &m_DepthList[EDepthS::D_Less_S_Always]);
 	dsDescDepth.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+	dsDescDepth.StencilEnable = false;
 	m_pD3dDevice->CreateDepthStencilState(&dsDescDepth, &m_DepthList[EDepthS::D_Less_NoWrite]);
 	dsDescDepth.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	dsDescDepth.DepthFunc = D3D11_COMPARISON_ALWAYS;

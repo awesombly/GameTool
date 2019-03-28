@@ -7,17 +7,18 @@ bool	Core::isPlaying = true;
 
 bool Core::GameRun() noexcept
 {
-	if (!GameInit())
-		return false;
-
+	//Timer::pCore = this;
 	// 쓰레드 가동
 	std::thread gameTimer(&Timer::Frame, &m_Timer);
 	//std::thread gameFrame(&Core::GameFrame, this);
 	//std::thread gameRender(&Core::GameRender, this);
-	
 
+	if (!GameInit())
+		return false;
+	
 	// 메인 쓰레드 루프
 	//while (MessageProcess());
+
 	ErrorMessage(__FUNCTION__ + " -> Loop Start."s);
 	while (isPlaying)
 	{
@@ -27,13 +28,12 @@ bool Core::GameRun() noexcept
 		GameFrame();
 	}
 	ErrorMessage(__FUNCTION__ + " -> Loop End."s);
-
+	
 	gameTimer.join();
 	//gameFrame.join();
 	//gameRender.join();
 
 	//GameRelease();
-	this_thread::sleep_for(chrono::milliseconds(100));
 	this_thread::yield();
 	// 모든 쓰레드 종료
 	//m_ClientServer.TerminateServer();
@@ -96,7 +96,6 @@ bool Core::GameFrame() noexcept
 		m_Input.Render();
 		Render();
 		m_DxManager.PostRender();
-
 //		std::this_thread::yield();
 //	}
 //	{

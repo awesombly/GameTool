@@ -63,7 +63,6 @@ protected:
 
 	ID3D11Buffer*		m_pMatrixCBuffer = nullptr;		// 상수 버퍼 - 행렬
 	ID3D11Buffer*		m_pMaterialCBuffer = nullptr;	// 쉐도우, 메테리얼 상수
-	CB_Material			m_cbMaterial;					// 쉐도우, 메테리얼 데이터
 	
 	vector<Sprite>*		m_pSpriteList = nullptr;	// 스프라이트(좌표, 프레임) 리스트
 	vector<Sprite>::iterator m_curSprite;			// 현재 스프라이트 이터레이터
@@ -74,6 +73,8 @@ protected:
 	static UINT Stride;				// 정점 크기
 	static UINT Offset;				// 시작 오프셋
 public:
+	CB_Material			m_cbMaterial;					// 쉐도우, 메테리얼 데이터
+
 	vector<Vertex_PNCT>	m_vertexList;				// 정점 배열
 	wstring				m_srcName;					// 텍스처 이름 (default=객체이름)
 	ERenderType			m_eRenderType = ERenderType::Basic;
@@ -140,5 +141,6 @@ protected:
 	Renderer& operator = (const Renderer&) = default;
 	Renderer& operator = (Renderer&&) = default;
 public:
+	Renderer(const wstring_view& myName, const string_view& vertexShaderName = "VS_Final", const string_view& pixelShaderName = "PS_Final") noexcept;
 	~Renderer() noexcept = default;
 };

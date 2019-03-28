@@ -9,6 +9,7 @@ int	  Timer::FPS = 0;
 float Timer::AccumulateTime = 0.0f;
 Timer*	Timer::Instance = nullptr;
 queue<tuple<void(*)(void*, void*), void*, void*> > Timer::SecondFrameEvent;
+//Core* Timer::pCore = nullptr;
 
 Timer::Timer() : m_kDirTick(1.0f / 60), m_ElapseTime(0.0f), m_FrameCnt(0),
 				m_CurrentTick({ 0,0 }), m_BeforeTick({ 0,0 }), m_GameSpeed(1.0f)
@@ -73,13 +74,10 @@ bool Timer::Frame() noexcept
 			m_BeforeTick.QuadPart = m_CurrentTick.QuadPart;
 
 			m_FrameEvent.notify_all();
+			//pCore->GameFrame();
 			std::this_thread::yield();
 		}
 	}
-	//{
-		//std::lock_guard<mutex> lock(m_mutex);
-		//ErrorMessage(__FUNCTION__ + " -> Timer Exit!"s);
-	//}
 	m_FrameEvent.notify_all();
 	return false;
 }

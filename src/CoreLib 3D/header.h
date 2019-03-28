@@ -55,7 +55,8 @@ using namespace std;
 
 constexpr static float PI = 3.14159265358979323846f;
 constexpr static float EPSILON = std::numeric_limits<float>::epsilon();
-constexpr static float GravityPower = 9.8f * 10.0f;
+constexpr static float GravityPower = 9.8f * 30.0f;
+
 
 namespace Vector3 {
 	const static D3DXVECTOR3 One	  =	{ 1.0f,  1.0f,  1.0f };			// 1, 1, 1

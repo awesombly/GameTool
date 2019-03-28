@@ -31,9 +31,9 @@ bool SkySphere::Render(ID3D11DeviceContext* pDContext) noexcept
 {
 	if (!m_isEnable) return false;
 	DxManager::GetInstance().SetDepthStencilState(EDepthS::D_Off_NoWrite);
-	//DxManager::GetInstance().SetSamplerState(ESamTextureS::Mirror);
+	DxManager::GetInstance().SetSamplerState(0, ESamTextureS::Mirror);
 	RSphere::Render(pDContext);
-	//DxManager::GetInstance().SetSamplerState(ESamTextureS::Current);
+	DxManager::GetInstance().SetSamplerState(0, ESamTextureS::Current);
 	DxManager::GetInstance().SetDepthStencilState(EDepthS::Current);
 	return true;
 }

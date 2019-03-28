@@ -34,4 +34,6 @@ protected:
 
 	Core() = default;
 	virtual ~Core() = default;
+
+	friend class Timer;
 };

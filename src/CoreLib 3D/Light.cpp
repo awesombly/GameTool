@@ -32,7 +32,7 @@ Light::Light(const wstring_view& myName, const ELight& eLightType, const bool& i
 bool Light::Init()	noexcept
 {
 	Camera::Init();
-	//m_FOV = PI * 0.8f;
+	//m_FOV = PI * 0.6f;
 	return true;
 }
 
@@ -48,8 +48,8 @@ bool Light::Render(ID3D11DeviceContext* pDContext)			noexcept
 {
 	if (!m_isEnable)	return false;
 	UpdateConstBuffer(pDContext);
-	pDContext->VSSetConstantBuffers(1, 1, &m_pEnviCBuffer);		// 상수(환경)
-	pDContext->PSSetConstantBuffers(1, 1, &m_pEnviCBuffer);		// 상수(환경)
+	pDContext->VSSetConstantBuffers(5, 1, &m_pEnviCBuffer);		// 상수(환경)
+	pDContext->PSSetConstantBuffers(5, 1, &m_pEnviCBuffer);		// 상수(환경)
 	pDContext->VSSetConstantBuffers(2, 1, &m_pLightCBuffer);	// 상수(조명)
 	pDContext->PSSetConstantBuffers(2, 1, &m_pLightCBuffer);	// 상수(조명)
 	pDContext->VSSetConstantBuffers(3, 1, &m_pMaterialCBuffer);	// 상수(그림자)
@@ -99,8 +99,9 @@ void Light::UpdateConstBuffer(ID3D11DeviceContext* pDContext) noexcept
 		pDContext->Map(m_pEnviCBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource);
 		CB_Environment* pEnviData = (CB_Environment*)MappedResource.pData;
 
-		m_cbEnviData.LightVector = { GetPosition(), 1.33f };
-		//m_cbEnviData.matNormal = Matrix::Identity;
+		UpdateMatrix();
+		m_cbEnviData.LightVector = { GetForward(), 1.33f };
+		//m_cbEnviData.LightVector = { GetPosition(), 1.33f };
 		m_cbEnviData.EyePos = { (*m_ppCamera)->GetPosition(), 100.0f };
 		m_cbEnviData.EyeDir = { (*m_ppCamera)->GetForward(), 100.0f };
 

@@ -48,14 +48,14 @@ bool CAnimation::Frame(const float& spf, const float& accTime)	noexcept
 {
 	if (!m_Animations.empty())
 	{
-		if (Input::GetKeyState(VK_TAB) != EKeyState::HOLD)
-		{
+		//if (Input::GetKeyState(VK_TAB) != EKeyState::HOLD)
+		//{
 			m_frameCount += spf * m_animSpeed;
-		}
-		else
-		{
-			m_frameCount += spf * m_animSpeed * 0.35f;
-		}
+		//}
+		//else
+		//{
+		//	m_frameCount += spf * m_animSpeed * 0.35f;
+		//}
 
 		// 애니메이션 작업
 		if (m_frameCount >= m_animFrame)

@@ -3,6 +3,8 @@
 #include "Window.h"
 #include <mutex>
 
+class Core;
+
 class Timer : public IBasis
 {
 private:
@@ -30,6 +32,7 @@ public:
 
 	// 초당 발생 이벤트(함수, 인자, 인자)
 	static queue<tuple<void(*)(void*, void*), void*, void*> > SecondFrameEvent;
+	//static Core* pCore;
 public:
 	void ResetSPF()			noexcept;
 	void setDirFrame(const int& dirFrame);

@@ -112,20 +112,11 @@
     <ClCompile Include="MaxImporter.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="DxClient.cpp">
-      <Filter>Server</Filter>
-    </ClCompile>
-    <ClCompile Include="Worker.cpp">
-      <Filter>Server</Filter>
+    <ClCompile Include="CAnimation.cpp">
+      <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="CEventTimer.cpp">
       <Filter>Component\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="CAnimation.cpp">
-      <Filter>Component\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="HeightMap.cpp">
-      <Filter>Component\Renderer\Child</Filter>
     </ClCompile>
     <ClCompile Include="CPlaneShadow.cpp">
       <Filter>Component\Basic</Filter>
@@ -133,8 +124,14 @@
     <ClCompile Include="AseParser.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="HeightMap.cpp">
+      <Filter>Component\Renderer\Child</Filter>
+    </ClCompile>
     <ClCompile Include="FrustumBox.cpp">
       <Filter>Component\Renderer\Child</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadingParameter.cpp">
+      <Filter>Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -264,20 +261,11 @@
     <ClInclude Include="MaxImporter.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="DxClient.h">
-      <Filter>Server</Filter>
-    </ClInclude>
-    <ClInclude Include="Worker.h">
-      <Filter>Server</Filter>
+    <ClInclude Include="CAnimation.h">
+      <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="CEventTimer.h">
       <Filter>Component\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="CAnimation.h">
-      <Filter>Component\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="HeightMap.h">
-      <Filter>Component\Renderer\Child</Filter>
     </ClInclude>
     <ClInclude Include="CPlaneShadow.h">
       <Filter>Component\Basic</Filter>
@@ -285,8 +273,14 @@
     <ClInclude Include="AseParser.h">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="HeightMap.h">
+      <Filter>Component\Renderer\Child</Filter>
+    </ClInclude>
     <ClInclude Include="FrustumBox.h">
       <Filter>Component\Renderer\Child</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingParameter.h">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -332,9 +326,6 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{e2203dfe-7bc3-4363-a152-be2ee34301dc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Server">
-      <UniqueIdentifier>{47d37799-1a2e-4f42-b1e7-8c9930b46eb7}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\data\shader\Basis.hlsl">
@@ -346,10 +337,16 @@
     <FxCompile Include="..\..\data\shader\EnviMap.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\data\shader\Final.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
     <FxCompile Include="..\..\data\shader\Instance.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="..\..\data\shader\NormalMap.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\data\shader\OutLine.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="..\..\data\shader\RenderTarget.hlsl">
@@ -358,13 +355,10 @@
     <FxCompile Include="..\..\data\shader\Shader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\data\shader\ShaderData.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
     <FxCompile Include="..\..\data\shader\ShadowMap.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\data\shader\Final.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\data\shader\OutLine.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

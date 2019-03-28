@@ -26,20 +26,21 @@
 //	UCHAR warmStarted;				// 디버그 랜더용?
 //};
 
+class Collider;
 
 struct PhysicsInfo
 {
-	// 게임 제작용
+	bool m_usePhysics	 = true;
+	bool m_isMoving		 = false;
+	bool m_isGround		 = false;
+
 	UINT UserSocket		 = DataInfo::MaxUINT;
 	float m_maxHP		 = 1.0f;
 	float m_curHP		 = 1.0f;
 	float m_disHP		 = 1.0f;
 	float m_damage		 = 0.0f;
-	//float m_armor		 = 1.0f;
-
-	bool m_usePhysics	 = true;
-	bool m_isMoving		 = false;
-	bool m_isGround		 = false;
+	float m_armor		 = 1.0f;
+	void(*DeadEvent)(Collider* pCollider, const UINT& killUser) = nullptr;
 
 	D3DXVECTOR3 m_force		= Vector3::Zero;	// 적용중인 힘
 	D3DXVECTOR3 m_direction = Vector3::Zero;	// 이동 힘
@@ -75,11 +76,14 @@ public:
 	const float GetVelocitySq()						  const noexcept;
 	///
 	void SetDamage(const float& value, const UCHAR& stat)	noexcept;
+	void SetDamage(const float& value)						noexcept;
 	//void SetArmor(const UCHAR& armorStat)					noexcept;
 	void OperHP(const float& value)							noexcept;
 	void HealHP(const float& value)							noexcept;
 	void SetHP(const float& value)							noexcept;
 	const float& GetHP()							  const noexcept;
+	void SetArmor(const char& stat)							noexcept;
+	const float& GetArmor()							  const noexcept;
 	///
 	void usePhysics(const bool& usePhysics)					noexcept;
 	bool usePhysics()										noexcept;

@@ -30,7 +30,7 @@ VS_OUTPUT_PNCTV3 VS_Normal(VS_INPUT_PNCTT input)
 
 	float3 vNormal = normalize(mul(input.nor, (float3x3)g_matNormal));
 	//float3 vNormal = input.nor;
-	output.nor = float4(vNormal, (output.pos.w - NEAR) / (FAR - NEAR));
+	output.nor = float4(vNormal, (output.pos.w - fNEAR) / (fFAR - fNEAR));
 	output.vEye = normalize(cb_EyePos.xyz - WorldPos.xyz);
 
 	float3 tangent = normalize(mul(input.tan, (float3x3)g_matNormal));
@@ -39,8 +39,11 @@ VS_OUTPUT_PNCTV3 VS_Normal(VS_INPUT_PNCTT input)
 	float3x3 matTangent = { tangent.x, biNormal.x, vNormal.x,
 							tangent.y, biNormal.y, vNormal.y,
 							tangent.z, biNormal.z, vNormal.z };
-	//float3 vLightDir = -cb_LightVector;// normalize(cb_LightVector.xyz - WorldPos.xyz);
+#ifdef DirectLight
+	float3 vLightDir = -cb_LightVector.xyz;
+#else
 	float3 vLightDir = normalize(cb_LightVector.xyz - WorldPos.xyz);
+#endif
 	//float fDot = lerp(dot(vLightDir, output.nor), 1.0f, 0.3f) + 0.3f;
 
 	output.vHalf	 = normalize(mul(normalize(vLightDir + output.vEye), matTangent));

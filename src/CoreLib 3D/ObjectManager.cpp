@@ -2,6 +2,8 @@
 #include "ColliderAABB.h"
 #include "ColliderOBB.h"
 #include <fstream>
+//#include "../../include/model/AHeroObj.h"
+#include "LoadingParameter.h"
 
 map<UINT, GameObject*> ObjectManager::KeyObjects;
 UINT				   ObjectManager::KeyCount = 0;
@@ -10,7 +12,7 @@ Camera*				   ObjectManager::CurCamera;
 list<Light*>		   ObjectManager::Lights;
 queue<tuple<void(*)(void*, void*), void*, void*> >	 ObjectManager::PostFrameEvent;
 
-static const float g_fMaxSize = 1024.0f;
+//static const float g_fMaxSize = 1024.0f;
 
 bool ObjectManager::Init() noexcept
 {
@@ -54,6 +56,8 @@ bool ObjectManager::Frame(const float& spf, const float& accTime) noexcept
 	for (auto& iter : Lights)
 	{
 		iter->Frame(spf, accTime);
+		//iter->SetPosition(CurCamera->GetWorldPosition() + Vector3::Up * 250.0f + Vector3::Backward * 500.0f);
+		//iter->SetRotation(CurCamera->GetWorldRotation() + Quaternion::Up * PI * 0.25f);
 	}
 	for (auto& outiter : m_ObjectList)
 	{
@@ -86,20 +90,50 @@ bool ObjectManager::Render(ID3D11DeviceContext* pDContext) noexcept
 {
 	Camera::SelectCamera->Render(pDContext);
 
-	Lights.front()->SetFocus(Vector3::Zero);
+	//Lights.front()->SetFocus(Vector3::Zero);
 	for (auto& iter : Lights)
 	{
 		iter->Render(pDContext);
 	}
 	CurCamera = Lights.front();
-
 	// ================================== 깊이맵 생성 ======================================
-	DxManager::GetInstance().m_RTDSViewShadow.ClearView(pDContext);
-	DxManager::GetInstance().SetViewPort(EViewPort::Main);
-	DxManager::GetInstance().SetDepthStencilState(EDepthS::Basic);
-	DxManager::GetInstance().SetRasterizerState(ERasterS::DepthBias);
+	DxManager::Get().m_RTDSViewShadow.ClearView(pDContext);
+	DxManager::Get().SetViewPort(EViewPort::Main);
+	DxManager::Get().SetDepthStencilState(EDepthS::Basic);
+	DxManager::Get().SetRasterizerState(ERasterS::DepthBias);
 
 #pragma region DepthMap Render
+	/*auto pMainCamera = Cameras[ECamera::Main];
+	for (auto& iter : *ObjectManager::Get().GetObjectList(EObjType::AObject))
+	{
+		((AHeroObj*)iter)->SetMatrix(nullptr, &CurCamera->m_matView, &CurCamera->m_matProj);
+		((AHeroObj*)iter)->SetVSShader(DxManager::Get().m_VShaderList["VS_DepthMapPNCT"]);
+		((AHeroObj*)iter)->SetPSShader(nullptr);
+		iter->Render(DxManager::GetDContext());
+		((AHeroObj*)iter)->ReturnVSShader();
+		((AHeroObj*)iter)->ReturnPSShader();
+		((AHeroObj*)iter)->SetMatrix(nullptr, &pMainCamera->m_matView, &pMainCamera->m_matProj);
+	}
+	for (auto& iter : *ObjectManager::Get().GetObjectList(EObjType::Character))
+	{
+		((AHeroObj*)iter)->SetMatrix(nullptr, &CurCamera->m_matView, &CurCamera->m_matProj);
+		((AHeroObj*)iter)->SetVSShader(DxManager::Get().m_VShaderList["VS_DepthMapPNCT"]);
+		((AHeroObj*)iter)->SetPSShader(nullptr);
+		iter->Render(DxManager::GetDContext());
+		((AHeroObj*)iter)->ReturnVSShader();
+		((AHeroObj*)iter)->ReturnPSShader();
+		((AHeroObj*)iter)->SetMatrix(nullptr, &pMainCamera->m_matView, &pMainCamera->m_matProj);
+	}
+	for (auto& iter : *ObjectManager::Get().GetObjectList(EObjType::Enemy))
+	{
+		((AHeroObj*)iter)->SetMatrix(nullptr, &CurCamera->m_matView, &CurCamera->m_matProj);
+		((AHeroObj*)iter)->SetVSShader(DxManager::Get().m_VShaderList["VS_DepthMapPNCT"]);
+		((AHeroObj*)iter)->SetPSShader(nullptr);
+		iter->Render(DxManager::GetDContext());
+		((AHeroObj*)iter)->ReturnVSShader();
+		((AHeroObj*)iter)->ReturnPSShader();
+		((AHeroObj*)iter)->SetMatrix(nullptr, &pMainCamera->m_matView, &pMainCamera->m_matProj);
+	}*/
 	// 깊이맵 랜더
 	for (auto& iter : m_ObjectList[EObjType::Object])
 	{
@@ -111,7 +145,7 @@ bool ObjectManager::Render(ID3D11DeviceContext* pDContext) noexcept
 			if (pRenderer != nullptr)
 			{
 				pRenderer->PrevRender(pDContext);
-				pDContext->VSSetShader(DxManager::GetInstance().m_VShaderList["VS_DepthMap"], nullptr, 0);
+				pDContext->VSSetShader(DxManager::Get().m_VShaderList["VS_DepthMap"], nullptr, 0);
 				pDContext->PSSetShader(nullptr, nullptr, 0);
 				pRenderer->PostRender(pDContext);
 			}
@@ -127,17 +161,17 @@ bool ObjectManager::Render(ID3D11DeviceContext* pDContext) noexcept
 			if (pRenderer != nullptr)
 			{
 				pRenderer->PrevRender(pDContext);
-				pDContext->VSSetShader(DxManager::GetInstance().m_VShaderList["VS_DepthMap"], nullptr, 0);
+				pDContext->VSSetShader(DxManager::Get().m_VShaderList["VS_DepthMap"], nullptr, 0);
 				pDContext->PSSetShader(nullptr, nullptr, 0);
 				//pDContext->PSSetShader(DxManager::GetInstance().m_PShaderList["PS_DepthMap"], nullptr, 0);
 				pRenderer->PostRender(pDContext);
 			}
 		}
 	}
-	DxManager::GetInstance().SetDepthStencilState(EDepthS::Current);
-	DxManager::GetInstance().SetRasterizerState(ERasterS::Current);
-	DxManager::GetInstance().SetViewPort(EViewPort::Main);
-	DxManager::GetInstance().m_RTDSView.Setting(pDContext);
+	DxManager::Get().SetDepthStencilState(EDepthS::Current);
+	DxManager::Get().SetRasterizerState(ERasterS::Current);
+	DxManager::Get().SetViewPort(EViewPort::Main);
+	DxManager::Get().m_RTDSView.Setting(pDContext);
 	CurCamera = Cameras[ECamera::Main];
 #pragma endregion
 
@@ -146,24 +180,33 @@ bool ObjectManager::Render(ID3D11DeviceContext* pDContext) noexcept
 	{
 		switch (type)
 		{
+		 case EObjType::Character:
+		 case EObjType::Enemy:
+		 case EObjType::AObject:
 		 case EObjType::Object:
 		 case EObjType::Map:
 		 {
-			 // ================================================ 쉐도우(+) 랜더 ============================================================
-			 DxManager::GetInstance().SetSamplerState(1, ESamTextureS::Clamp, ESamFilterS::Linear);
-			 DxManager::GetInstance().SetSamplerState(2, ESamTextureS::Border, ESamFilterS::CompLinearPoint, 0, D3D11_COMPARISON_LESS);
+			 // ============================================= 쉐도우(+) 랜더 ============================================================
+			 DxManager::Get().SetSamplerState(0, ESamTextureS::Wrap, ESamFilterS::Linear);
+			 DxManager::Get().SetSamplerState(1, ESamTextureS::Clamp, ESamFilterS::Linear);
+			 DxManager::Get().SetSamplerState(2, ESamTextureS::Border, ESamFilterS::CompLinearPoint, 0, D3D11_COMPARISON_LESS);
 			 //DxManager::GetInstance().SetRasterizerState(ERasterS::CullBack);
-
 			 // 깊이맵 쉐도우
 			 for (auto& initer : outiter)
 			 {
-				pDContext->PSSetShaderResources(4, 1, &DxManager::GetInstance().m_RTDSViewShadow.m_pTexSRViews[0]);
+				pDContext->PSSetShaderResources(4, 1, &DxManager::Get().m_RTDSViewShadow.m_pTexSRViews[0]);
 				initer->Render(pDContext);
 			 }
 			 //DxManager::GetInstance().SetDepthStencilState(EDepthS::Current);
 			 //DxManager::GetInstance().SetRasterizerState(ERasterS::Current);
-			 DxManager::GetInstance().SetSamplerState(1, ESamTextureS::Current, ESamFilterS::Current);
-			 DxManager::GetInstance().SetSamplerState(2, ESamTextureS::Current, ESamFilterS::Current);
+			 DxManager::Get().SetSamplerState(0, ESamTextureS::Current, ESamFilterS::Current);
+			 DxManager::Get().SetSamplerState(1, ESamTextureS::Current, ESamFilterS::Current);
+			 DxManager::Get().SetSamplerState(2, ESamTextureS::Current, ESamFilterS::Current);
+		 }	break;
+		 case EObjType::Effect:
+		 case EObjType::UI:
+		 {
+			 continue;
 		 }	break;
 		 default:
 		 {
@@ -174,6 +217,15 @@ bool ObjectManager::Render(ID3D11DeviceContext* pDContext) noexcept
 		 }	break;
 		}
 	}
+	// 이펙 랜더
+	for (auto& iter : m_ObjectList[EObjType::Effect])
+	{
+		iter->Render(pDContext);
+	}
+	for (auto& iter : m_ObjectList[EObjType::UI])
+	{
+		iter->Render(pDContext);
+	}
 
 	// 인스턴스 랜더
 	for (auto& iter : m_InstanceList)
@@ -182,37 +234,36 @@ bool ObjectManager::Render(ID3D11DeviceContext* pDContext) noexcept
 	}
 
 	// ========================== 미니맵 =============================
-	////if (Input::isDebug)
-	//{
-	//	DxManager::GetInstance().ClearDepthStencilView();
-	//	DxManager::GetInstance().SetViewPort(EViewPort::MiniMap);
-	//	CurCamera = Cameras[ECamera::MiniMap];
-	//	for (auto& iter : Lights)
-	//	{
-	//		iter->Render(pDContext);
-	//	}
-	//	for (auto&[type, objects] : m_ObjectList)
-	//	{
-	//		if (type == EObjType::UI)
-	//			continue;
-	//		for (auto& iter : objects)
-	//		{
-	//			iter->Render(pDContext);
-	//		}
-	//	}
-	//	for (auto& iter : m_InstanceList)
-	//	{
-	//		iter->Render(pDContext);
-	//	}
-	//	CurCamera = Cameras[ECamera::Main];
-	//	DxManager::GetInstance().SetViewPort(EViewPort::Main);
-	//}
+	if (Input::isDebug)
+	{
+		DxManager::Get().ClearDepthStencilView();
+		DxManager::Get().SetViewPort(EViewPort::MiniMap);
+		CurCamera = Cameras[ECamera::MiniMap];
+		for (auto& iter : Lights)
+		{
+			iter->Render(pDContext);
+		}
+		for (auto&[type, objects] : m_ObjectList)
+		{
+			if (type == EObjType::UI)
+				continue;
+			for (auto& iter : objects)
+			{
+				iter->Render(pDContext);
+			}
+		}
+		for (auto& iter : m_InstanceList)
+		{
+			iter->Render(pDContext);
+		}
+		CurCamera = Cameras[ECamera::Main];
+		DxManager::Get().SetViewPort(EViewPort::Main);
+	}
 	return true;
 }
 
 bool ObjectManager::Release() noexcept
 {
-
 	for (auto& outIter : m_ObjectList)
 	{
 		for (auto& inIter : outIter.second)
@@ -241,49 +292,6 @@ void ObjectManager::ProcessPostEvent()	noexcept
 // 스트라이트 리스트
 bool ObjectManager::ReadSpriteScript() noexcept
 {
-	//FILE* fp;
-	//_wfopen_s(&fp, L"../../data/script/sprite.txt", L"rt");
-	//if (fp == nullptr)
-	//{
-	//	ErrorMessage(__FUNCTIONW__ + L" -> 파일 읽기 실패!"s);
-	//	return false;
-	//}
-	//
-	//TCHAR _buffer[100] = { 0, };
-	//TCHAR _objName[25] = { 0, };
-	//TCHAR _bitName[25] = { 0, };
-	//
-	//D3DXVECTOR4 _vector4;
-	//float _frame = 0.0f;
-	//Texture* _pTexture = nullptr;
-	//
-	//_fgetts(_buffer, _countof(_buffer), fp);					// 한줄 읽기
-	//while (wcscmp(_buffer, L"end\n"))
-	//{
-	//	_stscanf_s(_buffer, L"%s %s", _objName, 25, _bitName, 25);	// 객체 이름, 갯수
-	//
-	//	_fgetts(_buffer, _countof(_buffer), fp);
-	//	while (wcscmp(_buffer, L"\n"))
-	//	{
-	//		_stscanf_s(_buffer, L"%f %f %f %f %f",								// 스프라이트 정보(프레임, 좌표)
-	//			&_frame,
-	//			&_vector4.x, &_vector4.y,
-	//			&_vector4.z, &_vector4.w);
-	//
-	//		_pTexture = DxManager::Get().GetTexture(_bitName);
-	//		_vector4.x /= _pTexture->GetTexWidth();
-	//		_vector4.y /= _pTexture->GetTexHeight();
-	//		_vector4.z /= _pTexture->GetTexWidth();
-	//		_vector4.w /= _pTexture->GetTexHeight();
-	//
-	//		m_SpriteList[_objName].emplace_back(_pTexture, _frame, _vector4);
-	//		_fgetts(_buffer, _countof(_buffer), fp);
-	//	}
-	//	_fgetts(_buffer, _countof(_buffer), fp);
-	//}
-	//
-	//fclose(fp);
-
 	std::wifstream readStream(L"../../data/script/sprite.txt");
 	if (!readStream.is_open())
 	{
@@ -303,12 +311,17 @@ bool ObjectManager::ReadSpriteScript() noexcept
 			break;
 		wistringstream lineStream(subString);
 		lineStream >> _objName >> _srcName;
+		///
+		++LoadClass::LoadingCount;
+		LoadClass::LoadingString = subString.c_str();
+		this_thread::sleep_for(chrono::milliseconds(20));
 
 		_pTexture = DxManager::Get().GetTexture(_srcName);
 		while (std::getline(readStream, subString))
 		{
 			if (subString.empty())
 				break;
+
 			wistringstream lineStream2(subString);
 			//
 			_frame	 = 0.0f;
@@ -336,6 +349,11 @@ forward_list<GameObject*>* ObjectManager::GetObjectList(const EObjType& objType)
 	return &m_ObjectList[objType];
 }
 
+map<EObjType, forward_list<GameObject*> >& ObjectManager::GetObjectList() noexcept
+{
+	return m_ObjectList;
+}
+
 vector<Sprite>* ObjectManager::GetSpriteList(const wstring_view& spriteName) noexcept
 {
 	auto iter = m_SpriteList.find(spriteName.data());
@@ -357,8 +375,9 @@ map<wstring, vector<Sprite> >& ObjectManager::GetSpriteList() noexcept
 GameObject* ObjectManager::TakeObject(const wstring_view& objName, const bool& pushObject) noexcept
 {
 	GameObject* pObject = nullptr;
-	if (m_DisabledPull.find(objName.data()) == m_DisabledPull.end() ||
-		m_DisabledPull[objName.data()].empty())
+	auto&& finder = m_DisabledPull.find(objName.data());
+	if (finder == m_DisabledPull.end() ||
+		finder->second.empty())
 	{
 		//대기 풀이 비었다면 복사 생성
 		auto&& iter = m_ProtoPull.find(objName.data());
@@ -372,8 +391,8 @@ GameObject* ObjectManager::TakeObject(const wstring_view& objName, const bool& p
 	else
 	{
 		// 대기 풀이 있다면 꺼내옴
-		pObject = m_DisabledPull[objName.data()].top();
-		m_DisabledPull[objName.data()].pop();
+		pObject = finder->second.top();
+		finder->second.pop();
 		//auto pComp = pObject->GetComponentList(EComponent::Collider);
 		//if (pComp != nullptr)
 		//{
@@ -414,13 +433,16 @@ GameObject* ObjectManager::TakeObject(const wstring_view& objName, const bool& p
 
 bool ObjectManager::SetProtoObject(GameObject* pObject) noexcept
 {
+	++LoadClass::LoadingCount;
+	LoadClass::LoadingString = L"Setting " + pObject->m_myName;
+	this_thread::sleep_for(chrono::milliseconds(50));
+
 	if (m_ProtoPull.find(pObject->m_myName) != m_ProtoPull.end())
 	{
 		ErrorMessage(__FUNCTION__ + " -> 중복된 이름!"s);
 		return false;
 	}
 	m_ProtoPull[pObject->m_myName] = pObject;
-	//pObject->isEnable(false);
 
 	// KeyObject 제거
 	KeyObjects.erase(pObject->m_keyValue);
@@ -436,30 +458,40 @@ bool ObjectManager::SetProtoObject(GameObject* pObject) noexcept
 	return true;
 }
 
-void ObjectManager::PushObject(GameObject* pObject) noexcept
+void ObjectManager::PushObject(GameObject* pObject, const bool& isPostEvent) noexcept
 {
-	if (find(m_ObjectList[pObject->m_objType].begin(), m_ObjectList[pObject->m_objType].end(), pObject)
-		== m_ObjectList[pObject->m_objType].end())
+	if (isPostEvent)
 	{
-		static auto pushEvent = [](void* pVoid, void*) {
-			GameObject* pObj = (GameObject*)pVoid;
-			ObjectManager::Get().m_ObjectList[pObj->m_objType].push_front(pObj);
-			pObj->isEnable(true);
+		static auto pPushEvent = [](void* pObj, void*) {
+			ObjectManager::Get().PushObject((GameObject*)pObj, false);
 		};
-
-		PostFrameEvent.emplace(pushEvent, pObject, nullptr);
+		PostFrameEvent.emplace(pPushEvent, pObject, nullptr);
+	}
+	else
+	{
+		auto& objList = m_ObjectList[pObject->m_objType];
+		if (find(objList.begin(), objList.end(), pObject) == objList.end())
+		{
+			objList.push_front(pObject);
+			pObject->isEnable(true);
+		}
+		else
+		{
+			ErrorMessage(__FUNCTIONW__ + L" -> 중복 객체 등록, "s + pObject->m_myName + L" : "  + to_wstring(pObject->m_keyValue));
+		}
 	}
 }
 
 void ObjectManager::PopObject(GameObject* pObject) noexcept
 {
 	auto& findList = m_ObjectList[pObject->m_objType];
-	auto&& iter = find(findList.begin(), findList.end(), pObject);
-	if (iter == findList.end())
-	{
-		//ErrorMessage(__FUNCTIONW__ + L" -> "s + pObject->m_myName + L", Not Found!" );
-		return;
-	}
+	findList.remove(pObject);
+	//auto&& iter = find(findList.begin(), findList.end(), pObject);
+	//if (iter == findList.end())
+	//{
+	//	//ErrorMessage(__FUNCTIONW__ + L" -> "s + pObject->m_myName + L", Not Found!" );
+	//	return;
+	//}
 	// 충돌체 제거
 	auto pColliders = pObject->GetComponentList(EComponent::Collider);
 	if (pColliders != nullptr)
@@ -469,7 +501,11 @@ void ObjectManager::PopObject(GameObject* pObject) noexcept
 			PopCollider((Collider*)pCol, false);
 		}
 	}
-	findList.remove(*iter);
+	//if (pObject->GetParent() != nullptr)
+	//{
+	//	pObject->CutParent(false);
+	//}
+	//findList.remove(*iter);
 }
 
 void ObjectManager::DisableObject(GameObject* pObject) noexcept
@@ -477,6 +513,8 @@ void ObjectManager::DisableObject(GameObject* pObject) noexcept
 	static auto disableEvent = [](void* pVoid, void*) {
 		GameObject* pObj = (GameObject*)pVoid;
 		pObj->isEnable(false);
+		pObj->CutParent(false);
+		pObj->SetPosition(Vector3::Up * 100000.0f);
 		ObjectManager::Get().PopObject(pObj);
 		ObjectManager::Get().m_DisabledPull[pObj->m_myName].push(pObj);
 		auto pColliders = pObj->GetComponentList(EComponent::Collider);
@@ -490,7 +528,13 @@ void ObjectManager::DisableObject(GameObject* pObject) noexcept
 		}
 	};
 
-	PostFrameEvent.emplace(disableEvent, pObject, nullptr);
+	if (pObject != nullptr && pObject->isEnable())
+	{
+		pObject->isEnable(false);
+		PostFrameEvent.emplace(disableEvent, pObject, nullptr);
+	}
+	//else
+	//	ErrorMessage(__FUNCTIONW__ + L" -> 비활성 오브젝트 : "s + pObject->m_myName);
 }
 
 bool ObjectManager::RemoveObject(GameObject* pObject) noexcept
@@ -606,7 +650,7 @@ void ObjectManager::DisableComponent(Component* pComponent) noexcept
 	PostFrameEvent.emplace(disableEvent, pComponent, nullptr);
 }
 
-forward_list<Collider*>& ObjectManager::GetColliderList() noexcept
+const forward_list<Collider*>& ObjectManager::GetColliderList() noexcept
 {
 	return m_ColliderList;
 }

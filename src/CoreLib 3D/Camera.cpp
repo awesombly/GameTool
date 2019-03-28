@@ -41,7 +41,7 @@ bool Camera::Init()	noexcept
 
 	m_lerpMoveSpeed = 3.5f;
 	m_lerpRotateSpeed = 5.0f;
-	m_armLength = 6.0f;
+	m_armLength = 12.0f;
 	return true;
 }
 
@@ -66,6 +66,13 @@ bool Camera::Frame(const float& spf, const float& accTime)	noexcept
 		}
 #pragma endregion
 #pragma region KeyCheck
+		if (Input::GetInstance().GetKeyState(VK_SPACE) == EKeyState::DOWN)
+		{
+			auto camPos = GetWorldPosition();
+			auto camRot = GetWorldRotation();
+			ErrorMessage("CameraPos -> " + to_string(camPos.x) + ", " + to_string(camPos.y) + ", " + to_string(camPos.z));
+			ErrorMessage("CameraRot -> " + to_string(camRot.x) + ", " + to_string(camRot.y) + ", " + to_string(camRot.z));
+		}
 		// FOV 값 조절
 		if (Input::GetInstance().GetKeyState('Z') == EKeyState::HOLD)
 		{
@@ -77,7 +84,7 @@ bool Camera::Frame(const float& spf, const float& accTime)	noexcept
 			m_FOV += spf;
 			SetProjMatrix();
 		}
-		if (Input::GetInstance().GetKeyState('X') == EKeyState::HOLD)
+		if (Input::GetInstance().GetKeyState('X') == EKeyState::DOWN)
 		{
 			m_FOV = PI * 0.5f;
 			SetProjMatrix();
@@ -88,66 +95,66 @@ bool Camera::Frame(const float& spf, const float& accTime)	noexcept
 			isPerspect(!m_isPerspect);
 		}
 		// 초기화
-		if (Input::GetInstance().GetKeyState(VK_NUMPAD5) == EKeyState::DOWN ||
+		if (//Input::GetInstance().GetKeyState(VK_NUMPAD5) == EKeyState::DOWN ||
 			Input::GetInstance().GetKeyState('R') == EKeyState::DOWN)
 		{
 			Init();
 		}
-		if (Input::GetInstance().GetKeyState(VK_NUMPAD4) == EKeyState::HOLD ||
+		if (//Input::GetInstance().GetKeyState(VK_NUMPAD4) == EKeyState::HOLD ||
 			Input::GetInstance().GetKeyState('A') == EKeyState::HOLD)
 		{
 			m_position += GetLeft() * m_curMoveSpeed * spf;
 			isMoving = true;
 		}
-		if (Input::GetInstance().GetKeyState(VK_NUMPAD6) == EKeyState::HOLD ||
+		if (//Input::GetInstance().GetKeyState(VK_NUMPAD6) == EKeyState::HOLD ||
 			Input::GetInstance().GetKeyState('D') == EKeyState::HOLD)
 		{
 			m_position += GetRight() * m_curMoveSpeed * spf;
 			isMoving = true;
 		}
-		if (Input::GetInstance().GetKeyState(VK_NUMPAD8) == EKeyState::HOLD ||
+		if (//Input::GetInstance().GetKeyState(VK_NUMPAD8) == EKeyState::HOLD ||
 			Input::GetInstance().GetKeyState('E') == EKeyState::HOLD)
 		{
 			m_position += GetUp() * m_curMoveSpeed * spf;
 			isMoving = true;
 		}
-		if (Input::GetInstance().GetKeyState(VK_NUMPAD2) == EKeyState::HOLD ||
+		if (//Input::GetInstance().GetKeyState(VK_NUMPAD2) == EKeyState::HOLD ||
 			Input::GetInstance().GetKeyState('Q') == EKeyState::HOLD)
 		{
 			m_position += GetDown() * m_curMoveSpeed * spf;
 			isMoving = true;
 		}
-		if (Input::GetInstance().GetKeyState(VK_ADD) == EKeyState::HOLD ||
+		if (//Input::GetInstance().GetKeyState(VK_ADD) == EKeyState::HOLD ||
 			Input::GetInstance().GetKeyState('W') == EKeyState::HOLD)
 		{
 			m_position += GetForward() * m_curMoveSpeed *spf;
 			isMoving = true;
 		}
-		if (Input::GetInstance().GetKeyState(VK_SUBTRACT) == EKeyState::HOLD ||
+		if (//Input::GetInstance().GetKeyState(VK_SUBTRACT) == EKeyState::HOLD ||
 			Input::GetInstance().GetKeyState('S') == EKeyState::HOLD)
 		{
 			m_position += GetBackward() * m_curMoveSpeed *spf;
 			isMoving = true;
 		}
-		if (Input::GetInstance().GetKeyState(VK_NUMPAD1) == EKeyState::HOLD ||
+		if (//Input::GetInstance().GetKeyState(VK_NUMPAD1) == EKeyState::HOLD ||
 			Input::GetInstance().GetKeyState(VK_LEFT) == EKeyState::HOLD)
 		{
 			Rotate(Quaternion::Left * m_rotateSpeed * spf);
 			isRotating = true;
 		}
-		if (Input::GetInstance().GetKeyState(VK_NUMPAD3) == EKeyState::HOLD ||
+		if (//Input::GetInstance().GetKeyState(VK_NUMPAD3) == EKeyState::HOLD ||
 			Input::GetInstance().GetKeyState(VK_RIGHT) == EKeyState::HOLD)
 		{
 			Rotate(Quaternion::Right * m_rotateSpeed * spf);
 			isRotating = true;
 		}
-		if (Input::GetInstance().GetKeyState(VK_NUMPAD7) == EKeyState::HOLD ||
+		if (//Input::GetInstance().GetKeyState(VK_NUMPAD7) == EKeyState::HOLD ||
 			Input::GetInstance().GetKeyState(VK_UP) == EKeyState::HOLD)
 		{
 			Rotate(Quaternion::Down * m_rotateSpeed * spf);
 			isRotating = true;
 		}
-		if (Input::GetInstance().GetKeyState(VK_NUMPAD9) == EKeyState::HOLD ||
+		if (//Input::GetInstance().GetKeyState(VK_NUMPAD9) == EKeyState::HOLD ||
 			Input::GetInstance().GetKeyState(VK_DOWN) == EKeyState::HOLD)
 		{
 			Rotate(Quaternion::Up * m_rotateSpeed * spf);
@@ -170,7 +177,7 @@ bool Camera::Frame(const float& spf, const float& accTime)	noexcept
 
 	if (m_pParent != nullptr)
 	{
-		m_curPosition = Lerp(m_curPosition + GetBackward() * m_armLength, m_pParent->GetWorldPosition(), spf * m_lerpMoveSpeed);
+		m_curPosition = Lerp(m_curPosition, m_pParent->GetWorldPosition(), spf * m_lerpMoveSpeed);
 		m_curRotation = Lerp(m_curRotation, m_pParent->GetWorldRotation(), spf * m_lerpRotateSpeed);
 		//D3DXQuaternionSlerp(&m_curRotation, &m_curRotation, &m_pParent->GetRotation(), spf);
 	}
@@ -244,9 +251,11 @@ void Camera::UpdateMatrix() noexcept
 	if (m_pParent != nullptr)
 	{
 		static D3DXMATRIX matTarget;
+		static D3DXVECTOR3 cameraPos;
+		cameraPos = m_curPosition + GetBackward() * m_armLength;
 		// 벡터를 쿼터니언으로 변환
 		D3DXQuaternionRotationYawPitchRoll(&quaternion, m_curRotation.y, 0.0f, 0.0f);
-		D3DXMatrixAffineTransformation(&matTarget, 1.0f, NULL, &quaternion, &m_curPosition);
+		D3DXMatrixAffineTransformation(&matTarget, 1.0f, NULL, &quaternion, &cameraPos);
 
 		D3DXQuaternionRotationYawPitchRoll(&quaternion, m_rotation.y, m_rotation.x, m_rotation.z);
 		D3DXMatrixAffineTransformation(&m_matWorld, 1.0f, NULL, &quaternion, &m_position);

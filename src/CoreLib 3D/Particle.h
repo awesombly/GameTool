@@ -12,7 +12,6 @@ private:
 	// m_Look == scalePerLife
 	// m_Side == InitScale
 
-	D3DXVECTOR3 m_direction;
 	float m_maxMoveSpeed;
 	float m_accMoveSpeed;
 	float m_curMoveSpeed;
@@ -26,6 +25,8 @@ private:
 	float m_curGravity;
 
 	bool m_isEnable;
+public:
+	D3DXVECTOR3 m_direction;
 public:
 	void SetLifeCycle(const float& minValue, const float& maxValue)					 noexcept;
 

@@ -1,11 +1,4 @@
-// setShaderResourceView~ 할때 첫번째 인자가 레지스터의 슬롯이고,
-// 변수명으로 그 슬롯에 해당하는 텍스쳐 픽셀 값을 받아와 조합해 사용할 수 있다.(Max 8, 샘플러도 마찬가지)
-//Texture2D g_txDiffuse  : register (t0);
-//Texture2D g_txDiffuse1 : register (t1);
-//SamplerState samLinear : register (s0);
-
-static const float NEAR = 0.1f;
-static const float FAR = 2000.0f;
+#include "ShaderData.hlsl"
 
 // 상수 버퍼 : 버퍼 0번
 cbuffer cbMatrix: register(b0)
@@ -17,9 +10,8 @@ cbuffer cbMatrix: register(b0)
 	float4  g_MeshColor     : packoffset(c16);
 };
 // 환경 데이터
-cbuffer cbObjectData : register(b1)
+cbuffer cbObjectData : register(b5)
 {
-	//matrix g_matNormal;
 	float4 cb_LightVector;
 	float4 cb_EyePos;
 	float4 cb_EyeDir;
@@ -66,6 +58,13 @@ struct VS_INPUT_PNCTT
 	float4 col : COLOR0;			// 0번 레지스터로 출력
 	float2 tex : TEXCOORD0;
 	float3 tan : TANGENT;
+};
+struct VS_INPUT_PNCT
+{
+	float3 pos : POSITION;
+	float3 nor : NORMAL;
+	float4 col : COLOR0;
+	float2 tex : TEXCOORD0;
 };
 // 정점 출력(노말+깊이)
 struct VS_OUTPUT_PNCT
